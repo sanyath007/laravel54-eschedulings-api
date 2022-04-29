@@ -66,6 +66,8 @@ Route::group(['middleware' => ['jwt.verify']], function() {
 
     Route::get('/holidays', 'HolidayController@getAll');
     Route::get('/holidays/{year}/year', 'HolidayController@getHolidaysOfYear');
+    
+    Route::get('/files/{id}', 'FileController@getFile');
 
     /** Routes to person db */
     Route::get('/factions', 'FactionController@getAll');
