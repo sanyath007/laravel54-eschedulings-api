@@ -29,7 +29,8 @@ html {
 body {
   font-family: "THSarabunNew";
   font-size: 14pt;
-  margin: 0px 60px;
+  margin: 0;
+  /* border: 1px dashed red; */
 }
 /* table {
   border: 1px dashed black;
@@ -49,15 +50,15 @@ td p {
   border-collapse: collapse;
 }
 .table th,
-td {
-  padding: 0px;
-  margin: 0px;
+.table td {
+  padding: 0;
+  margin: 0;
   vertical-align: text-top;
   padding-left: 5px;
 }
 .dot {
-  padding: 0px;
-  margin: 0px;
+  padding: 0;
+  margin: 0;
 }
 span.text-val {
   font-weight: bold;
@@ -65,15 +66,15 @@ span.text-val {
 }
 .container {
   width: 100%;
-  padding: 0px;
-  margin: 0px 0px 0px 50px;
+  padding: 0;
+  /* margin: 0 0 0 50px; */
   /* background-image: url("assets/img/print_bg.png"); */
   background-repeat: repeat;
   background-position: center;
 }
 .header {
   padding: 5px;
-  margin: 0px;
+  margin: 0;
   text-align: center;
 }
 .header-text h1,

@@ -2,7 +2,7 @@
 
 use Intervention\Image\ImageManagerStatic as Image;
 
-function uploadFile ($file, $destPath)
+function uploadFile($file, $destPath)
 {
     $filename = '';
     if ($file) {
@@ -14,7 +14,7 @@ function uploadFile ($file, $destPath)
     return $filename;
 }
 
-function uploadThumbnail ($img, $destPath)
+function uploadThumbnail($img, $destPath)
 {
     $img_name = '';
     if ($img) {
@@ -30,7 +30,7 @@ function uploadThumbnail ($img, $destPath)
     return $img_name;
 }
 
-function convDbDateToThDate ($dbDate)
+function convDbDateToThDate($dbDate)
 {
     if(empty($dbDate)) return '';
 
@@ -39,7 +39,7 @@ function convDbDateToThDate ($dbDate)
     return $arrDate[2]. '/' .$arrDate[1]. '/' .((int)$arrDate[0] + 543);
 }
 
-function convThDateToDbDate ($dbDate)
+function convThDateToDbDate($dbDate)
 {
     if(empty($dbDate)) return '';
 
@@ -48,21 +48,7 @@ function convThDateToDbDate ($dbDate)
     return ((int)$arrDate[2] - 543). '-' .$arrDate[1]. '-' .$arrDate[0];
 }
 
-function calcBudgetYear ($sdate)
-{
-    $budgetYear = date('Y') + 543;
-    list($day, $month, $year) = explode('/', $sdate);
-
-    if ((int)$month >= 10) {
-        $budgetYear = (int)$year + 1;
-    } else {
-        $budgetYear = (int)$year;
-    }
-
-    return $budgetYear;
-}
-
-function convDbDateToLongThDate ($dbDate)
+function convDbDateToLongThDate($dbDate)
 {
     $monthNames = [
         '01' => 'มกราคม',
@@ -86,12 +72,55 @@ function convDbDateToLongThDate ($dbDate)
     return (int)$arrDate[2]. ' ' .$monthNames[$arrDate[1]]. ' ' .((int)$arrDate[0] + 543);
 }
 
+function convDbDateToLongThMonth($dbDate)
+{
+    $monthNames = [
+        '01' => 'มกราคม',
+        '02' => 'กุมภาพันธ์',
+        '03' => 'มีนาคม',
+        '04' => 'เมษายน',
+        '05' => 'พฤษภาคม',
+        '06' => 'มิถุนายน',
+        '07' => 'กรกฎาคม',
+        '08' => 'สิงหาคม',
+        '09' => 'กันยายน',
+        '10' => 'ตุลาคม',
+        '11' => 'พฤศจิกายน',
+        '12' => 'ธันวาคม',
+    ];
+
+    if(empty($dbDate)) return '';
+
+    $arrDate = explode('-', $dbDate);
+
+    return $monthNames[$arrDate[1]]. ' ' .((int)$arrDate[0] + 543);
+}
+
+function calcBudgetYear($sdate)
+{
+    $budgetYear = date('Y') + 543;
+    list($day, $month, $year) = explode('/', $sdate);
+
+    if ((int)$month >= 10) {
+        $budgetYear = (int)$year + 1;
+    } else {
+        $budgetYear = (int)$year;
+    }
+
+    return $budgetYear;
+}
+
 /**
  * $renderType should be 'preview' | 'download'
  */
-function renderPdf($view, $data, $renderType = 'preview')
+function renderPdf($view, $data, $paper = [], $renderType = 'preview')
 {
-    $pdf = PDF::loadView($view, $data);
+    /** Set paper size */
+    $paperSize = empty($paper['size']) ? 'a4' : $paper['size']; // a4, letter or custom etc. array(0, 0, 567.00, 283.80);
+    /** Set paper orientation */
+    $orientation = empty($paper['orientation']) ? 'portrait' : $paper['orientation']; // portrait or landscape
+
+    $pdf = PDF::loadView($view, $data)->setPaper($paperSize, $orientation);
 
     /** แบบนี้จะ stream มา preview */
     if ($renderType == 'preview') {

@@ -9,13 +9,13 @@ class Depart extends Model
     protected $connection = "person";
     protected $table = "depart";
 
-    public function nurse()
+    public function faction()
     {
-        return $this->hasOne(Nurse::class);
+        return $this->belongsTo(Faction::class, 'faction_id', 'faction_id');
     }
-    
-    public function prefix()
+
+    public function divisions()
     {
-        return $this->belongsTo(Prefix::class, 'person_prefix', 'prefix_id');
+        return $this->hasMany(Division::class, 'depart_id', 'depart_id');
     }
 }

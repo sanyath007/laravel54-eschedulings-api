@@ -12,3 +12,4 @@
 */
 
 Route::get('/files/{id}', 'FileController@getFile');
+Route::get('/files/{id}/print', 'FileController@printForm');

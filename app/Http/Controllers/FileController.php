@@ -8,6 +8,9 @@ use Illuminate\Support\Facades\Input;
 use Illuminate\Support\Facades\Storage;
 use Response;
 use File;
+use App\Models\Scheduling;
+use App\Models\SchedulingDetail;
+use App\Models\Person;
 
 class FileController extends Controller
 {
@@ -35,5 +38,35 @@ class FileController extends Controller
     public function delete($file)
     {
         //
+    }
+
+    public function printForm($id)
+    {
+        $schedule = Scheduling::where('id', $id)
+                        ->with('depart','division','controller')
+                        ->with('depart.faction')
+                        ->with('shifts','shifts.person')
+                        ->with('shifts.person.prefix','shifts.person.position')
+                        ->first();
+
+        $controller = Person::where('person_id', $schedule->controller_id)
+                        ->with('prefix','position')
+                        ->first();
+
+        $headOfFaction = Person::join('level', 'personal.person_id', '=', 'level.person_id')
+                            ->where('level.faction_id', '5')
+                            ->where('level.duty_id', '1')
+                            ->with('prefix','position')
+                            ->first();
+
+        $data = [
+            'schedule' => $schedule,
+            'controller' => $controller,
+            'headOfFaction' => $headOfFaction,
+        ];
+
+        $paper = ['size' => 'legal', 'orientation' => 'landscape'];
+        /** Invoke helper function to return view of pdf instead of laravel's view to client */
+        return renderPdf('forms.form01', $data, $paper, 'download');
     }
 }
