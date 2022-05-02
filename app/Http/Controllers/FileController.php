@@ -54,7 +54,7 @@ class FileController extends Controller
                         ->first();
 
         $headOfFaction = Person::join('level', 'personal.person_id', '=', 'level.person_id')
-                            ->where('level.faction_id', '5')
+                            ->where('level.faction_id', $schedule->depart->faction_id)
                             ->where('level.duty_id', '1')
                             ->with('prefix','position')
                             ->first();

@@ -7,7 +7,7 @@
     <body>
         <div class="container">
             <div class="header">
-                <h3 style="margin: 0px;">ตารางปฏิบัติงานในและนอกเวลาราชการ</h3>
+                <h1 style="margin: 0px;">ตารางปฏิบัติงานในและนอกเวลาราชการ</h1>
             </div>
             <div class="content">
                 <table style="width: 100%;">
@@ -32,16 +32,12 @@
                     <tr>
                         <td style="text-align: right; padding: 0;" colspan="3">
                             <h4 style="margin: 0;">
-                                หน่วยงาน 
-                                @if($schedule->division)
-                                    <span style="margin: 0px;">{{ $schedule->division->ward_name }}</span>
-                                @endif
-                                <span style="margin: 0 0 0 5px;">{{ $schedule->depart->depart_name }}</span>
+                                หน่วยงาน <span style="margin: 0px;">{{ $schedule->depart->depart_name }}</span>
                             </h4>
                         </td>
                         <td style="padding: 0;" colspan="3">
                             <h4 style="margin: 0;">
-                                <span style="margin: 0 0 0 10px;">
+                                <span style="margin: 0 0 0 15px;">
                                     {{ $schedule->depart->faction->faction_name }}
                                 </span>
                                 <span style="margin: 0 0 0 10px;">
@@ -59,8 +55,9 @@
                                     <td style="width: 12%; text-align: center;" rowspan="2">ตำแหน่ง</td>
                                     <td style="text-align: center;" colspan="{{ date('t', strtotime($schedule->month.'-01')) }}">วันที่</td>
                                     <td style="width: 3%; text-align: center; padding: 0;" rowspan="2">
-                                        รวม
+                                        วันทำการ
                                     </td>
+                                    <td style="width: 3%; text-align: center; padding: 0;" rowspan="2">OT</td>
                                     <td style="width: 5%; text-align: center; padding: 0;" rowspan="2">หมายเหตุ</td>
                                 </tr>
                                 <tr style="font-size: 14px; padding: 0;">
@@ -94,7 +91,10 @@
                                             </td>
                                         @endforeach
                                         <td style="text-align: center; padding: 0;">
-                                            {{ $detail->total }}
+                                            {{ $detail->working }}
+                                        </td>
+                                        <td style="text-align: center; padding: 0;">
+                                            {{ $detail->ot }}
                                         </td>
                                         <td style="text-align: center; padding: 0;">
                                             {{ $detail->remark }}
