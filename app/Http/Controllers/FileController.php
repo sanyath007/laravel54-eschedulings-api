@@ -67,6 +67,6 @@ class FileController extends Controller
 
         $paper = ['size' => 'legal', 'orientation' => 'landscape'];
         /** Invoke helper function to return view of pdf instead of laravel's view to client */
-        return renderPdf('forms.form01', $data, $paper, 'download');
+        return renderPdf('forms.form01', $data, $paper); // if you need to save file set 4th arg as 'download'
     }
 }
