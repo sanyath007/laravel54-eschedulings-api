@@ -70,6 +70,7 @@ Route::group(['middleware' => ['jwt.verify']], function() {
     /** Routes to person db */
     Route::get('/factions', 'FactionController@getAll');
     Route::get('/factions/{id}', 'FactionController@getById');
+    Route::get('/factions/{faction}/head-of', 'FactionController@getHeadOfFaction');
 
     Route::get('/departs', 'DepartController@getAll');
     Route::get('/departs/{id}', 'DepartController@getById');
@@ -82,5 +83,4 @@ Route::group(['middleware' => ['jwt.verify']], function() {
 
     Route::get('/persons', 'PersonController@getAll');
     Route::get('/persons/{id}', 'PersonController@getById');
-    Route::get('/persons/head-of/faction/{faction}', 'PersonController@getHeadOfFaction');
 });

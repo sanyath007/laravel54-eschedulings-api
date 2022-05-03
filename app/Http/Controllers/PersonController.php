@@ -9,15 +9,15 @@ use App\Models\Person;
 
 class PersonController extends Controller
 {
-    public function getAll($request, $response, $args)
+    public function getAll(Request $req)
     {
-        $page       = (int)$request->getQueryParam('page');
-        $fname      = $request->getQueryParam('fname');
-        $faction    = empty($request->getQueryParam('faction')) ? '5' : $request->getQueryParam('faction');
-        $depart     = $request->getQueryParam('depart');
-        $division   = $request->getQueryParam('division');
+        $page       = (int)$req->getQueryParam('page');
+        $fname      = $req->getQueryParam('fname');
+        $faction    = empty($req->getQueryParam('faction')) ? '5' : $req->getQueryParam('faction');
+        $depart     = $req->getQueryParam('depart');
+        $division   = $req->getQueryParam('division');
 
-        $model = Person::whereNotIn('person_state', [6,7,8,9,99])
+        $persons = Person::whereNotIn('person_state', [6,7,8,9,99])
                     ->join('level', 'personal.person_id', '=', 'level.person_id')
                     ->where('level.faction_id', $faction)
                     ->when($depart != '', function($q) use ($depart) {
@@ -30,40 +30,22 @@ class PersonController extends Controller
                         $q->where('person_firstname', 'like', '%'.$fname.'%');
                     })
                     ->with('prefix','position','academic')
-                    ->with('memberOf','memberOf.depart');
+                    ->with('memberOf','memberOf.depart')
+                    ->paginate(10);
 
-        $reg = paginate($model, 10, $page, $request);
-        
-        $data = json_encode($reg, JSON_UNESCAPED_SLASHES | JSON_PRETTY_PRINT |  JSON_UNESCAPED_UNICODE);
-
-        return $response
-                ->withStatus(200)
-                ->withHeader("Content-Type", "application/json")
-                ->write($data);
+        return [
+            'persons' => $persons
+        ];
     }
 
-    public function getById($request, $response, $args)
+    public function getById($id)
     {
-        $person = Person::where('person_id', $args['id'])
-                    ->with('prefix','position')
-                    ->first();
-        
-        return $response
-                ->withStatus(200)
-                ->withHeader("Content-Type", "application/json")
-                ->write(json_encode($person, JSON_UNESCAPED_SLASHES | JSON_PRETTY_PRINT |  JSON_UNESCAPED_UNICODE));
-    }
-
-    public function getHeadOfFaction($faction)
-    {
-        $person = Person::join('level', 'personal.person_id', '=', 'level.person_id')
-                    ->where('level.faction_id', $faction)
-                    ->where('level.duty_id', '1')
+        $person = Person::where('person_id', $id)
                     ->with('prefix','position')
                     ->first();
         
         return [
-            'person'  => $person
+            'person' => $person
         ];
     }
 

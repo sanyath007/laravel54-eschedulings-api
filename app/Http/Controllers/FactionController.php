@@ -27,6 +27,19 @@ class FactionController extends Controller
         ];
     }
 
+    public function getHeadOfFaction($faction)
+    {
+        $person = Person::join('level', 'personal.person_id', '=', 'level.person_id')
+                    ->where('level.faction_id', $faction)
+                    ->where('level.duty_id', '1')
+                    ->with('prefix','position')
+                    ->first();
+        
+        return [
+            'person'  => $person
+        ];
+    }
+
     // public function store($request, $response, $args)
     // {
     //     $post = (array)$request->getParsedBody();
