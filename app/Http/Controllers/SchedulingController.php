@@ -134,20 +134,20 @@ class SchedulingController extends Controller
 
             if($scheduling->save()) {
                 /** TODO: To manipulate scheduling_detail data on scheduling is updated */
-                $oldDetail = SchedulingDetail::where('scheduling_id', $args['id'])->delete();
+                $oldDetail = SchedulingDetail::where('scheduling_id', $id)->delete();
 
-                foreach($post['person_shifts'] as $ps) {
+                foreach($req['person_shifts'] as $ps) {
                     $shiftsText = implode(',', $ps['shifts']);
 
                     $detail = new SchedulingDetail;
-                    $detail->scheduling_id  = $args['id'];
+                    $detail->scheduling_id  = $id;
                     $detail->person_id      = $ps['person']['person_id'];
                     $detail->shifts         = $shiftsText;
                     $detail->n              = $ps['n']; // เวรดึก
                     $detail->m              = $ps['m']; // เวรเช้า
                     $detail->e              = $ps['e']; // เวรบ่าย
                     $detail->b              = $ps['b']; // เวร BD
-                    $detail->total          = $ps['total_shift'];
+                    $detail->total          = $ps['total'];
                     $detail->working        = 0;
                     $detail->ot             = 0;
                     $detail->save();
