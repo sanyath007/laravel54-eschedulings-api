@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Input;
 use App\Models\Depart;
+use App\Models\Person;
 
 class DepartController extends Controller
 {
@@ -25,6 +26,17 @@ class DepartController extends Controller
         return [
             'depart' => $depart
         ];
+    }
+
+    public function getMemberOfDepart($depart)
+    {
+        $members = Person::join('level', 'level.person_id', '=', 'personal.person_id')
+                    ->where(['level.depart_id' => $depart])
+                    ->with('prefix','position')
+                    ->where('person_state', '1')
+                    ->get();
+
+        return $members;
     }
 
     // public function store($request, $response, $args)

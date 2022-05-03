@@ -50,8 +50,6 @@ Route::group(['middleware' => ['jwt.verify']], function() {
     Route::get('/schedulings', 'SchedulingController@getAll');
     Route::get('/schedulings/{id}', 'SchedulingController@getById');
     Route::get('/schedulings/add/init-form', 'SchedulingController@initForm');
-    Route::get('/schedulings/member-of/depart/{depart}', 'SchedulingController@getMemberOfDepart');
-    Route::get('/schedulings/member-of/division/{division}', 'SchedulingController@getMemberOfDivision');
     Route::post('/schedulings', 'SchedulingController@store');
     Route::put('/schedulings/{id}', 'SchedulingController@update');
     Route::delete('/schedulings/{id}', 'SchedulingController@delete');
@@ -75,9 +73,12 @@ Route::group(['middleware' => ['jwt.verify']], function() {
 
     Route::get('/departs', 'DepartController@getAll');
     Route::get('/departs/{id}', 'DepartController@getById');
-
+    Route::get('/departs/{depart}/member-of', 'DepartController@getMemberOfDepart');
+    
+    
     Route::get('/divisions', 'DivisionController@getAll');
     Route::get('/divisions/{id}', 'DivisionController@getById');
+    Route::get('/divisions/{division}/member-of', 'DivisionController@getMemberOfDivision');
 
     Route::get('/persons', 'PersonController@getAll');
     Route::get('/persons/{id}', 'PersonController@getById');

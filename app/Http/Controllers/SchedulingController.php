@@ -67,27 +67,6 @@ class SchedulingController extends Controller
         ];
     }
 
-    public function getMemberOfDivision()
-    {
-        $members = Person::join('level', 'level.person_id', '=', 'personal.person_id')
-                    ->where(['level.ward_id'     => $args['division']])
-                    ->where('person_state', '1')
-                    ->get();
-
-        return $members;
-    }
-
-    public function getMemberOfDepart()
-    {
-        $members = Person::join('level', 'level.person_id', '=', 'personal.person_id')
-                    ->where(['level.depart_id'     => $args['depart']])
-                    ->with('prefix','position')
-                    ->where('person_state', '1')
-                    ->get();
-
-        return $members;
-    }
-
     public function store(Request $req)
     {
         try {

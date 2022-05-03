@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Input;
 use App\Models\Division;
+use App\Models\Person;
 
 class DivisionController extends Controller
 {
@@ -25,6 +26,16 @@ class DivisionController extends Controller
         return [
             'division' => $division
         ];
+    }
+
+    public function getMemberOfDivision($division)
+    {
+        $members = Person::join('level', 'level.person_id', '=', 'personal.person_id')
+                    ->where(['level.ward_id' => $division])
+                    ->where('person_state', '1')
+                    ->get();
+
+        return $members;
     }
 
     // public function store($request, $response, $args)
