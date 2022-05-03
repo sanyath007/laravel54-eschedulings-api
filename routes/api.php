@@ -58,6 +58,7 @@ Route::group(['middleware' => ['jwt.verify']], function() {
     Route::get('/schedule-details/{id}', 'SchedulingDetailController@getById');
     Route::put('/schedule-details/{id}', 'SchedulingDetailController@update');
     Route::put('/schedule-details/{id}/swap', 'SchedulingDetailController@swap');
+    Route::put('/schedule-details/{id}/off', 'SchedulingDetailController@off');
     Route::put('/schedule-details/{id}/ot', 'SchedulingDetailController@oT');
 
     Route::get('/shifts', 'ShiftController@getAll');

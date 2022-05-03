@@ -14,6 +14,7 @@ use App\Models\Division;
 use App\Models\MemberOf;
 use App\Models\Shift;
 use App\Models\ShiftSwapping;
+use App\Models\ShiftOff;
 use App\Models\Holiday;
 
 class SchedulingDetailController extends Controller
@@ -199,21 +200,20 @@ class SchedulingDetailController extends Controller
             $off->status = 'APPROVED';
 
             if($off->save()) {
-                $shiftsText = implode(',', $req['shifts']);
                 /** Update scheduling_details data */
-                $owner = SchedulingDetail::find($id);
-                $detail->shifts         = $shiftsText;
+                $detail = SchedulingDetail::find($id);
+                $detail->shifts         = $req['shifts'];
                 $detail->n              = $req['n']; // เวรดึก
                 $detail->m              = $req['m']; // เวรเช้า
                 $detail->e              = $req['e']; // เวรบ่าย
                 $detail->b              = $req['b']; // เวร BD
                 $detail->total          = $req['total'];
-                $owner->save();
+                $detail->save();
 
                 /** Update total shifts of schedulings */
-                $delegator = Scheduling::find($swap->swap_detail_id);
-                $delegator->shifts = $post['delegator_shifts'];
-                $delegator->save();
+                $schedule = Scheduling::find($req['scheduling_id']);
+                // $schedule->shifts = $req['total_shifts'];
+                // $schedule->save();
 
                 return [
                     'status'    => 1,
