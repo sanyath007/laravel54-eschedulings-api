@@ -11,11 +11,10 @@ class PersonController extends Controller
 {
     public function getAll(Request $req)
     {
-        $page       = (int)$req->getQueryParam('page');
-        $fname      = $req->getQueryParam('fname');
-        $faction    = empty($req->getQueryParam('faction')) ? '5' : $req->getQueryParam('faction');
-        $depart     = $req->getQueryParam('depart');
-        $division   = $req->getQueryParam('division');
+        $fname      = $req->get('fname');
+        $faction    = empty($req->get('faction')) ? '5' : $req->get('faction');
+        $depart     = $req->get('depart');
+        $division   = $req->get('division');
 
         $persons = Person::whereNotIn('person_state', [6,7,8,9,99])
                     ->join('level', 'personal.person_id', '=', 'level.person_id')
