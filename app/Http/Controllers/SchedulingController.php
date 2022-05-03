@@ -27,6 +27,8 @@ class SchedulingController extends Controller
 
         return [
             'schedulings'   => Scheduling::with('depart','division','controller')
+                                ->with('controller.prefix','controller.position')
+                                ->with('controller.academic')
                                 ->with('shifts','shifts.person','shifts.person.prefix')
                                 ->with('shifts.person.position','shifts.person.academic')
                                 ->when($month != '', function($q) use ($month) {
