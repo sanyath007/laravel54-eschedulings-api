@@ -44,12 +44,12 @@ class SchedulingDetailController extends Controller
         ];
     }
 
-    public function update($req, $res, $args)
+    public function update(Request $req, $id)
     {
         try {
             $post = (array)$req->getParsedBody();
 
-            $detail = SchedulingDetail::find($args['id']);
+            $detail = SchedulingDetail::find($id);
             $detail->scheduling_id  = $post['scheduling_id'];
             $detail->person_id      = $post['person_id'];
             $detail->shifts         = $post['shifts'];
@@ -64,31 +64,22 @@ class SchedulingDetailController extends Controller
                 // $scheduling->total_shifts   = $post['total_shifts'];
                 // $scheduling->save();
 
-                return $res
-                        ->withStatus(200)
-                        ->withHeader("Content-Type", "application/json")
-                        ->write(json_encode([
-                            'status'    => 1,
-                            'message'   => 'Updating successfully',
-                            'detail'    => $detail
-                        ], JSON_UNESCAPED_SLASHES | JSON_PRETTY_PRINT |  JSON_UNESCAPED_UNICODE));
+                return [
+                    'status'    => 1,
+                    'message'   => 'Updating successfully',
+                    'detail'    => $detail
+                ];
             } else {
-                return $res
-                    ->withStatus(500)
-                    ->withHeader("Content-Type", "application/json")
-                    ->write(json_encode([
-                        'status'    => 0,
-                        'message'   => 'Something went wrong!!'
-                    ], JSON_UNESCAPED_SLASHES | JSON_PRETTY_PRINT |  JSON_UNESCAPED_UNICODE));
+                return [
+                    'status'    => 0,
+                    'message'   => 'Something went wrong!!'
+                ];
             }
         } catch (\Exception $ex) {
-            return $res
-                    ->withStatus(500)
-                    ->withHeader("Content-Type", "application/json")
-                    ->write(json_encode([
-                        'status'    => 0,
-                        'message'   => $ex->getMessage()
-                    ], JSON_UNESCAPED_SLASHES | JSON_PRETTY_PRINT |  JSON_UNESCAPED_UNICODE));
+            return [
+                'status'    => 0,
+                'message'   => $ex->getMessage()
+            ];
         }
     }
 
@@ -131,31 +122,22 @@ class SchedulingDetailController extends Controller
                 /** TODO: To manipulate scheduling_detail data on scheduling is deleted */
                 $deletedDetail = SchedulingDetail::where('scheduling_id', $args['id'])->delete();
 
-                return $res
-                        ->withStatus(200)
-                        ->withHeader("Content-Type", "application/json")
-                        ->write(json_encode([
-                            'status'    => 1,
-                            'message'   => 'Deleting successfully',
-                            'id'        => $args['id']
-                        ], JSON_UNESCAPED_SLASHES | JSON_PRETTY_PRINT |  JSON_UNESCAPED_UNICODE));
+                return [
+                    'status'    => 1,
+                    'message'   => 'Deleting successfully',
+                    'id'        => $id
+                ];
             } else {
-                return $res
-                    ->withStatus(500)
-                    ->withHeader("Content-Type", "application/json")
-                    ->write(json_encode([
-                        'status'    => 0,
-                        'message'   => 'Something went wrong!!'
-                    ], JSON_UNESCAPED_SLASHES | JSON_PRETTY_PRINT |  JSON_UNESCAPED_UNICODE));
+                return [
+                'status'    => 0,
+                'message'   => 'Something went wrong!!'
+            ];
             }
         } catch (\Exception $ex) {
-            return $res
-                    ->withStatus(500)
-                    ->withHeader("Content-Type", "application/json")
-                    ->write(json_encode([
-                        'status'    => 0,
-                        'message'   => $ex->getMessage()
-                    ], JSON_UNESCAPED_SLASHES | JSON_PRETTY_PRINT |  JSON_UNESCAPED_UNICODE));
+            return [
+                'status'    => 0,
+                'message'   => $ex->getMessage()
+            ];
         }
     }
 
@@ -189,77 +171,65 @@ class SchedulingDetailController extends Controller
                 $delegator->shifts = $post['delegator_shifts'];
                 $delegator->save();
 
-                return $res
-                        ->withStatus(200)
-                        ->withHeader("Content-Type", "application/json")
-                        ->write(json_encode([
-                            'status'    => 1,
-                            'message'   => 'Updating successfully',
-                        ], JSON_UNESCAPED_SLASHES | JSON_PRETTY_PRINT |  JSON_UNESCAPED_UNICODE));
+                return [
+                    'status'    => 1,
+                    'message'   => 'Updating successfully',
+                ];
             } else {
-                return $res
-                    ->withStatus(500)
-                    ->withHeader("Content-Type", "application/json")
-                    ->write(json_encode([
-                        'status'    => 0,
-                        'message'   => 'Something went wrong!!'
-                    ], JSON_UNESCAPED_SLASHES | JSON_PRETTY_PRINT |  JSON_UNESCAPED_UNICODE));
+                return [
+                    'status'    => 0,
+                    'message'   => 'Something went wrong!!'
+                ];
             }
         } catch (\Exception $ex) {
-            return $res
-                    ->withStatus(500)
-                    ->withHeader("Content-Type", "application/json")
-                    ->write(json_encode([
-                        'status'    => 0,
-                        'message'   => $ex->getMessage()
-                    ], JSON_UNESCAPED_SLASHES | JSON_PRETTY_PRINT |  JSON_UNESCAPED_UNICODE));
+            return [
+                'status'    => 0,
+                'message'   => $ex->getMessage()
+            ];
         }
     }
 
-    public function approve($req, $res, $args)
+    public function off(Request $req, $id)
     {
         try {
-            $post = (array)$req->getParsedBody();
+            /** To add new ShiftOff record */
+            $off = new ShiftOff;
+            $off->scheduling_detail_id = $id;
+            $off->reason = $req['reason'];
+            $off->status = 'APPROVED';
 
-            /** To add new ShiftSwapping record */
-            $swap = ShiftSwapping::find($args['id']);
-            $swap->status = 'APPROVED';
-
-            if($swap->save()) {
-                /** Update owner's shift */
-                $owner = SchedulingDetail::find($swap->owner_detail_id);
-                $owner->shifts = $post['owner_shifts'];
+            if($off->save()) {
+                $shiftsText = implode(',', $req['shifts']);
+                /** Update scheduling_details data */
+                $owner = SchedulingDetail::find($id);
+                $detail->shifts         = $shiftsText;
+                $detail->n              = $req['n']; // เวรดึก
+                $detail->m              = $req['m']; // เวรเช้า
+                $detail->e              = $req['e']; // เวรบ่าย
+                $detail->b              = $req['b']; // เวร BD
+                $detail->total          = $req['total'];
                 $owner->save();
 
-                /** Update delegator's shift */
-                $delegator = SchedulingDetail::find($swap->swap_detail_id);
+                /** Update total shifts of schedulings */
+                $delegator = Scheduling::find($swap->swap_detail_id);
                 $delegator->shifts = $post['delegator_shifts'];
                 $delegator->save();
 
-                return $res
-                        ->withStatus(200)
-                        ->withHeader("Content-Type", "application/json")
-                        ->write(json_encode([
-                            'status'    => 1,
-                            'message'   => 'Updating successfully',
-                        ], JSON_UNESCAPED_SLASHES | JSON_PRETTY_PRINT |  JSON_UNESCAPED_UNICODE));
+                return [
+                    'status'    => 1,
+                    'message'   => 'Updating successfully',
+                ];
             } else {
-                return $res
-                    ->withStatus(500)
-                    ->withHeader("Content-Type", "application/json")
-                    ->write(json_encode([
-                        'status'    => 0,
-                        'message'   => 'Something went wrong!!'
-                    ], JSON_UNESCAPED_SLASHES | JSON_PRETTY_PRINT |  JSON_UNESCAPED_UNICODE));
+                return [
+                    'status'    => 0,
+                    'message'   => 'Something went wrong!!'
+                ];
             }
         } catch (\Exception $ex) {
-            return $res
-                    ->withStatus(500)
-                    ->withHeader("Content-Type", "application/json")
-                    ->write(json_encode([
-                        'status'    => 0,
-                        'message'   => $ex->getMessage()
-                    ], JSON_UNESCAPED_SLASHES | JSON_PRETTY_PRINT |  JSON_UNESCAPED_UNICODE));
+            return [
+                'status'    => 0,
+                'message'   => $ex->getMessage()
+            ];
         }
     }
 }

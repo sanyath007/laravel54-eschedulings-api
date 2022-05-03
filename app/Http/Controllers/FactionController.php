@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Input;
 use App\Models\Faction;
+use App\Models\Person;
 
 class FactionController extends Controller
 {
