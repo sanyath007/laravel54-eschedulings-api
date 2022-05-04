@@ -197,6 +197,8 @@ class SchedulingDetailController extends Controller
             $off = new ShiftOff;
             $off->scheduling_id         = $req['scheduling_id'];
             $off->scheduling_detail_id  = $id;
+            $off->shift_date            = $req['shift_date'];
+            $off->shift                 = $req['shift'];
             $off->reason                = $req['reason'];
             $off->status                = 'APPROVED';
 
@@ -213,8 +215,8 @@ class SchedulingDetailController extends Controller
 
                 /** Update total shifts of schedulings */
                 $schedule = Scheduling::find($req['scheduling_id']);
-                // $schedule->shifts       = $req['total_shifts'];
-                // $schedule->save();
+                $schedule->total_shifts = (int)$schedule->total_shifts - 1;
+                $schedule->save();
 
                 return [
                     'status'    => 1,
