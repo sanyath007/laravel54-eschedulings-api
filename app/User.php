@@ -36,6 +36,11 @@ class User extends Authenticatable implements JWTSubject
 
     protected $keyType = 'string';
 
+    public function prefix()
+    {
+        return $this->belongsTo('App\Models\Prefix', 'person_prefix', 'prefix_id');
+    }
+
     public function position()
     {
         return $this->belongsTo('App\Models\Position', 'position_id', 'position_id');

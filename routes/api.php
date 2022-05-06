@@ -24,8 +24,8 @@ Route::group(['middleware' => 'api', 'prefix' => 'auth'], function () {
 });
 
 Route::group(['middleware' => ['jwt.verify']], function() {
-    Route::get('/users', 'UserController@index');
-    Route::get('/users/{loginname}', 'UserController@getUser');
+    Route::get('/users', 'UserController@getAll');
+    Route::get('/users/{id}', 'UserController@getById');
 
     Route::get('/stats/{month}/patients', 'DashboardController@overallPatientStats');
     Route::get('/stats/{month}/beds', 'DashboardController@overallBedStats');

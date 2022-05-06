@@ -4,7 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Input;
-use App\Models\User;
+use App\User;
 
 class UserController extends Controller
 {
