@@ -154,8 +154,7 @@ class SchedulingDetailController extends Controller
             $swap->owner_shift      = $post['owner_shift'];     // เวรที่จะขอเปลี่ยน
             $swap->reason           = $post['reason'];
             $swap->delegator        = $post['delegator'];       // ผู้ปฏิบัติงานแทน
-            $swap->have_swap        = $post['have_swap'];
-
+            $swap->no_swap          = $post['no_swap'];         // กรณีขายเวร
             $swap->swap_detail_id   = $post['swap_detail_id'];  // รหัสเวรที่จะปฏิบัติงานแทน
             $swap->swap_date        = $post['swap_date'];       // วันที่จะปฏิบัติงานแทน
             $swap->swap_shift       = $post['swap_shift'];      // เวรที่จะปฏิบัติงานแทน
