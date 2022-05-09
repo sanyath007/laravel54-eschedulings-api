@@ -11,7 +11,9 @@ class ShiftSwappingController extends Controller
 {
     public function getAll(Request $req)
     {
-        $swappings = ShiftSwapping::all();
+        $swappings = ShiftSwapping::with('owner','owner.person')
+                        ->with('delegator','delegator.person')
+                        ->paginate(10);
 
         return [
             'swappings' => $swappings

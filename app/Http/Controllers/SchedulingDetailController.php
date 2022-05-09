@@ -153,9 +153,14 @@ class SchedulingDetailController extends Controller
             $swap->reason           = $req['reason'];
             $swap->delegator        = $req['delegator'];       // ผู้ปฏิบัติงานแทน
             $swap->no_swap          = $req['no_swap'];         // กรณีขายเวร
-            $swap->swap_detail_id   = $req['swap_detail_id'];  // รหัสเวรที่จะปฏิบัติงานแทน
-            $swap->swap_date        = $req['swap_date'];       // วันที่จะปฏิบัติงานแทน
-            $swap->swap_shift       = $req['swap_shift'];      // เวรที่จะปฏิบัติงานแทน
+
+            /** กรณีขึ้นปฏิบัติงานแทน */
+            if (!$req['no_swap']) {
+                $swap->swap_detail_id   = $req['swap_detail_id'];  // รหัสเวรที่จะปฏิบัติงานแทน
+                $swap->swap_date        = $req['swap_date'];       // วันที่จะปฏิบัติงานแทน
+                $swap->swap_shift       = $req['swap_shift'];      // เวรที่จะปฏิบัติงานแทน
+            }
+
             $swap->status           = 'REQUESTED';
 
             if($swap->save()) {
