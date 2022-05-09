@@ -15,6 +15,6 @@ class ShiftSwapping extends Model
 
     public function delegator()
     {
-        return $this->belongsTo(SchedulingDetail::class, 'swap_detail_id', 'id');
+        return $this->belongsTo(SchedulingDetail::class, 'delegator_detail_id', 'id');
     }
 }

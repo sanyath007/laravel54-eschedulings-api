@@ -147,30 +147,29 @@ class SchedulingDetailController extends Controller
         try {
             /** To add new ShiftSwapping record */
             $swap = new ShiftSwapping;
-            $swap->owner_detail_id  = $id;              // รหัสเวรที่จะขอเปลี่ยน
-            $swap->owner_date       = $req['owner_date'];      // วันที่จะขอเปลี่ยน
-            $swap->owner_shift      = $req['owner_shift'];     // เวรที่จะขอเปลี่ยน
-            $swap->reason           = $req['reason'];
-            $swap->delegator        = $req['delegator'];       // ผู้ปฏิบัติงานแทน
-            $swap->no_swap          = $req['no_swap'];         // กรณีขายเวร
+            $swap->owner_detail_id      = $id;                      // รหัสเวรที่จะขอเปลี่ยน
+            $swap->owner_date           = $req['owner_date'];       // วันที่จะขอเปลี่ยน
+            $swap->owner_shift          = $req['owner_shift'];      // เวรที่จะขอเปลี่ยน
+            $swap->reason               = $req['reason'];
+            $swap->delegator            = $req['delegator'];        // ผู้ปฏิบัติงานแทน
+            $swap->delegator_detail_id  = $req['delegator_detail_id'];  // รหัสเวรที่จะปฏิบัติงานแทน
+            $swap->no_swap              = $req['no_swap'];          // กรณีขายเวร
+            $swap->status               = 'REQUESTED';
 
             /** กรณีขึ้นปฏิบัติงานแทน */
             if (!$req['no_swap']) {
-                $swap->swap_detail_id   = $req['swap_detail_id'];  // รหัสเวรที่จะปฏิบัติงานแทน
                 $swap->swap_date        = $req['swap_date'];       // วันที่จะปฏิบัติงานแทน
                 $swap->swap_shift       = $req['swap_shift'];      // เวรที่จะปฏิบัติงานแทน
             }
 
-            $swap->status           = 'REQUESTED';
-
             if($swap->save()) {
                 /** Update owner's shift */
-                $owner = SchedulingDetail::find($id);
+                $owner = SchedulingDetail::find($swap->owner_detail_id);
                 $owner->shifts = $req['owner_shifts'];
                 $owner->save();
 
                 /** Update delegator's shift */
-                $delegator = SchedulingDetail::find($swap->swap_detail_id);
+                $delegator = SchedulingDetail::find($swap->delegator_detail_id);
                 $delegator->shifts = $req['delegator_shifts'];
                 $delegator->save();
 
@@ -197,7 +196,51 @@ class SchedulingDetailController extends Controller
      */
     public function approve(Request $req, $id)
     {
+        try {
+            $swap = ShiftSwapping::find($id);
+            $swap->status = 'APPROVED';
+    
+            if($swap->save()) {
+                /** Update owner's shift */
+                $owner = SchedulingDetail::find($swap->owner_detail_id);
+                $owner->shifts  = $req['owner_shifts'];
+                /** TODO: คำนวณจำนวนเวรของผู้ขอ */
+                // $owner->n       = $req['n']; // เวรดึก
+                // $owner->m       = $req['m']; // เวรเช้า
+                // $owner->e       = $req['e']; // เวรบ่าย
+                // $owner->b       = $req['b']; // เวร BD
+                // $owner->total   = $req['total'];
+                /** TODO: คำนวณจำนวนเวรของผู้ขอ */
+                // $owner->save();
 
+                /** Update delegator's shift */
+                $delegator = SchedulingDetail::find($swap->delegator_detail_id);
+                $delegator->shifts = $req['delegator_shifts'];
+                /** TODO: คำนวณจำนวนเวรของผู้รับ */
+                // $delegator->n       = $req['n']; // เวรดึก
+                // $delegator->m       = $req['m']; // เวรเช้า
+                // $delegator->e       = $req['e']; // เวรบ่าย
+                // $delegator->b       = $req['b']; // เวร BD
+                // $delegator->total   = $req['total'];
+                /** TODO: คำนวณจำนวนเวรของผู้รับ */
+                // $delegator->save();
+
+                return [
+                    'status'    => 1,
+                    'message'   => 'Updating successfully',
+                ];
+            } else {
+                return [
+                    'status'    => 0,
+                    'message'   => 'Something went wrong!!'
+                ];
+            }
+        } catch (\Exception $ex) {
+            return [
+                'status'    => 0,
+                'message'   => $ex->getMessage()
+            ];
+        }
     }
 
     public function off(Request $req, $id)
