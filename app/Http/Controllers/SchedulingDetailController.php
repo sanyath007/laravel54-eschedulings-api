@@ -142,33 +142,31 @@ class SchedulingDetailController extends Controller
         }
     }
 
-    public function swap($req, $res, $args)
+    public function swap(Request $req, $id)
     {
         try {
-            $post = (array)$req->getParsedBody();
-
             /** To add new ShiftSwapping record */
             $swap = new ShiftSwapping;
-            $swap->owner_detail_id  = $args['id'];              // รหัสเวรที่จะขอเปลี่ยน
-            $swap->owner_date       = $post['owner_date'];      // วันที่จะขอเปลี่ยน
-            $swap->owner_shift      = $post['owner_shift'];     // เวรที่จะขอเปลี่ยน
-            $swap->reason           = $post['reason'];
-            $swap->delegator        = $post['delegator'];       // ผู้ปฏิบัติงานแทน
-            $swap->no_swap          = $post['no_swap'];         // กรณีขายเวร
-            $swap->swap_detail_id   = $post['swap_detail_id'];  // รหัสเวรที่จะปฏิบัติงานแทน
-            $swap->swap_date        = $post['swap_date'];       // วันที่จะปฏิบัติงานแทน
-            $swap->swap_shift       = $post['swap_shift'];      // เวรที่จะปฏิบัติงานแทน
+            $swap->owner_detail_id  = $id;              // รหัสเวรที่จะขอเปลี่ยน
+            $swap->owner_date       = $req['owner_date'];      // วันที่จะขอเปลี่ยน
+            $swap->owner_shift      = $req['owner_shift'];     // เวรที่จะขอเปลี่ยน
+            $swap->reason           = $req['reason'];
+            $swap->delegator        = $req['delegator'];       // ผู้ปฏิบัติงานแทน
+            $swap->no_swap          = $req['no_swap'];         // กรณีขายเวร
+            $swap->swap_detail_id   = $req['swap_detail_id'];  // รหัสเวรที่จะปฏิบัติงานแทน
+            $swap->swap_date        = $req['swap_date'];       // วันที่จะปฏิบัติงานแทน
+            $swap->swap_shift       = $req['swap_shift'];      // เวรที่จะปฏิบัติงานแทน
             $swap->status           = 'REQUESTED';
 
             if($swap->save()) {
                 /** Update owner's shift */
-                $owner = SchedulingDetail::find($args['id']);
-                $owner->shifts = $post['owner_shifts'];
+                $owner = SchedulingDetail::find($id);
+                $owner->shifts = $req['owner_shifts'];
                 $owner->save();
 
                 /** Update delegator's shift */
-                $delegator = SchedulingDetail::find($post['swap_detail_id']);
-                $delegator->shifts = $post['delegator_shifts'];
+                $delegator = SchedulingDetail::find($swap->swap_detail_id);
+                $delegator->shifts = $req['delegator_shifts'];
                 $delegator->save();
 
                 return [
@@ -187,6 +185,14 @@ class SchedulingDetailController extends Controller
                 'message'   => $ex->getMessage()
             ];
         }
+    }
+
+    /**
+     * การอนุมัติการขอเปลี่ยน/สลับ/ขายเวร (เฉพาะหัวหน้า)
+     */
+    public function approve(Request $req, $id)
+    {
+
     }
 
     public function off(Request $req, $id)

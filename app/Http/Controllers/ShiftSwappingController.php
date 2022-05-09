@@ -11,10 +11,10 @@ class ShiftSwappingController extends Controller
 {
     public function getAll(Request $req)
     {
-        $shifts = ShiftSwapping::all();
+        $swappings = ShiftSwapping::all();
 
         return [
-
+            'swappings' => $swappings
         ];
     }
     
