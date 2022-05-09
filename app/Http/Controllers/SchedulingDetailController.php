@@ -147,6 +147,7 @@ class SchedulingDetailController extends Controller
         try {
             /** To add new ShiftSwapping record */
             $swap = new ShiftSwapping;
+            $swap->scheduling_id        = $req['scheduling_id'];
             $swap->owner_detail_id      = $id;                      // รหัสเวรที่จะขอเปลี่ยน
             $swap->owner_date           = $req['owner_date'];       // วันที่จะขอเปลี่ยน
             $swap->owner_shift          = $req['owner_shift'];      // เวรที่จะขอเปลี่ยน
