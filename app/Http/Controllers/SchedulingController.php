@@ -96,7 +96,7 @@ class SchedulingController extends Controller
                     $detail->m              = $ps['m']; // เวรเช้า
                     $detail->e              = $ps['e']; // เวรบ่าย
                     $detail->b              = $ps['b']; // เวร BD
-                    $detail->total          = $ps['total_shift'];
+                    $detail->total          = $ps['total'];
                     $detail->working        = 0;
                     $detail->ot             = 0;
                     $detail->save();
