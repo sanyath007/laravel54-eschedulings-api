@@ -127,7 +127,7 @@ class SchedulingController extends Controller
             $scheduling = Scheduling::find($id);
             $scheduling->depart_id      = $req['depart'];
             $scheduling->division_id    = $req['division'];
-            $scheduling->month          = $req['month'];            
+            $scheduling->month          = $req['month'];
             $scheduling->year           = $req['year'];
             $scheduling->controller_id  = $req['controller'];
             $scheduling->total_persons  = $req['total_persons'];
@@ -135,24 +135,27 @@ class SchedulingController extends Controller
             $scheduling->remark         = $req['remark'];
 
             if($scheduling->save()) {
-                /** TODO: To manipulate scheduling_detail data on scheduling is updated */
-                $oldDetail = SchedulingDetail::where('scheduling_id', $id)->delete();
+                /** Delete scheduling_detail data on that were specified in removedList array */
+                // $oldDetail = SchedulingDetail::whereIn('id', $req['removedList'])->delete();
 
                 foreach($req['person_shifts'] as $ps) {
-                    $shiftsText = implode(',', $ps['shifts']);
-
-                    $detail = new SchedulingDetail;
-                    $detail->scheduling_id  = $id;
-                    $detail->person_id      = $ps['person']['person_id'];
-                    $detail->shifts         = $shiftsText;
-                    $detail->n              = $ps['n']; // เวรดึก
-                    $detail->m              = $ps['m']; // เวรเช้า
-                    $detail->e              = $ps['e']; // เวรบ่าย
-                    $detail->b              = $ps['b']; // เวร BD
-                    $detail->total          = $ps['total'];
-                    $detail->working        = 0;
-                    $detail->ot             = 0;
-                    $detail->save();
+                    /** Check if person_shifts have not an id field (new row) */
+                    if (empty($ps['id'])) {
+                        $shiftsText = implode(',', $ps['shifts']);
+    
+                        $detail = new SchedulingDetail;
+                        $detail->scheduling_id  = $id;
+                        $detail->person_id      = $ps['person']['person_id'];
+                        $detail->shifts         = $shiftsText;
+                        $detail->n              = $ps['n']; // เวรดึก
+                        $detail->m              = $ps['m']; // เวรเช้า
+                        $detail->e              = $ps['e']; // เวรบ่าย
+                        $detail->b              = $ps['b']; // เวร BD
+                        $detail->total          = $ps['total'];
+                        $detail->working        = 0;
+                        $detail->ot             = 0;
+                        $detail->save();
+                    }
                 }
 
                 return [
