@@ -12,8 +12,8 @@ class ShiftSwappingController extends Controller
 {
     public function getAll(Request $req)
     {
-        $swappings = ShiftSwapping::with('owner','owner.person')
-                        ->with('delegator','delegator.person')
+        $swappings = ShiftSwapping::with('schedule','schedule.depart','schedule.division')
+                        ->with('owner','owner.person','delegator','delegator.person')
                         ->paginate(10);
 
         return [
@@ -24,8 +24,8 @@ class ShiftSwappingController extends Controller
     public function getById($id)
     {
         $swapping = ShiftSwapping::find($id)
-                        ->with('owner','owner.person')
-                        ->with('delegator','delegator.person');
+                        ->with('schedule','schedule.depart','schedule.division')
+                        ->with('owner','owner.person','delegator','delegator.person');
 
         return [
             'swapping' => $swapping

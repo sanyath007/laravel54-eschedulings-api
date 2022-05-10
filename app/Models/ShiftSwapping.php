@@ -8,6 +8,11 @@ class ShiftSwapping extends Model
 {
     protected $table = "shift_swappings";
 
+    public function schedule()
+    {
+        return $this->belongsTo(Scheduling::class, 'scheduling_id', 'id');
+    }
+
     public function owner()
     {
         return $this->belongsTo(SchedulingDetail::class, 'owner_detail_id', 'id');
