@@ -218,6 +218,18 @@ class SchedulingDetailController extends Controller
                 /** Update total shifts of schedulings */
                 $schedule = Scheduling::find($req['scheduling_id']);
                 $schedule->total_shifts = (int)$schedule->total_shifts - 1;
+
+                /** Update total_m, total_e, total_n, total_bd of schedulings */
+                if (in_array($req['shift'], ['ด','ด*','ด**','ด^'])) {
+                    $schedule->total_n = (int)$schedule->total_n - 1;
+                } else if (in_array($req['shift'], ['ช','ช*','ช**','ช^'])) {
+                    $schedule->total_m = (int)$schedule->total_m - 1;
+                } else if (in_array($req['shift'], ['บ','บ*','บ**','บ^'])) {
+                    $schedule->total_e = (int)$schedule->total_e - 1;
+                } else if (in_array($req['shift'], ['B','B*','B**','B^'])) {
+                    $schedule->total_bd = (int)$schedule->total_bd - 0.5;
+                }
+
                 $schedule->save();
 
                 return [
