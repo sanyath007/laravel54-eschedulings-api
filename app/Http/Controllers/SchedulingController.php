@@ -78,8 +78,12 @@ class SchedulingController extends Controller
             $scheduling->month          = $req['month'];            
             $scheduling->year           = $req['year'];
             $scheduling->controller_id  = $req['controller'];
-            $scheduling->total_persons  = $req['total_persons'];
+            $scheduling->total_m        = $req['total_m'];
+            $scheduling->total_e        = $req['total_e'];
+            $scheduling->total_n        = $req['total_n'];
+            $scheduling->total_bd       = $req['total_bd'];
             $scheduling->total_shifts   = $req['total_shifts'];
+            $scheduling->total_persons  = $req['total_persons'];
             $scheduling->remark         = $req['remark'];
 
             if($scheduling->save()) {
@@ -130,8 +134,12 @@ class SchedulingController extends Controller
             $scheduling->month          = $req['month'];
             $scheduling->year           = $req['year'];
             $scheduling->controller_id  = $req['controller'];
-            $scheduling->total_persons  = $req['total_persons'];
+            $scheduling->total_m        = $req['total_m'];
+            $scheduling->total_e        = $req['total_e'];
+            $scheduling->total_n        = $req['total_n'];
+            $scheduling->total_bd       = $req['total_bd'];
             $scheduling->total_shifts   = $req['total_shifts'];
+            $scheduling->total_persons  = $req['total_persons'];
             $scheduling->remark         = $req['remark'];
 
             if($scheduling->save()) {
