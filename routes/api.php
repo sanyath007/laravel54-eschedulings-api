@@ -64,6 +64,8 @@ Route::group(['middleware' => ['jwt.verify']], function() {
     Route::get('/swappings', 'ShiftSwappingController@getAll');
     Route::put('/swappings/{id}/approve', 'ShiftSwappingController@approve');
 
+    Route::get('/shift-offs', 'ShiftOffController@getAll');
+
     Route::get('/shifts', 'ShiftController@getAll');
     Route::get('/shifts/{id}', 'ShiftController@getById');
     Route::get('/shifts/{name}/name', 'ShiftController@getByName');
