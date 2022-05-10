@@ -34,7 +34,7 @@ class SchedulingController extends Controller
                                 ->when($month != '', function($q) use ($month) {
                                     $q->where('month', $month);
                                 })
-                                ->get(),
+                                ->paginate(10),
             'memberOfDep'   => Person::join('level', 'level.person_id', '=', 'personal.person_id')
                                 ->where([
                                     'level.faction_id'    => '5',
