@@ -97,6 +97,28 @@ span.text-val {
   text-decoration: underline;
 }
 
+span.text-val-dot {
+  width: 100%;
+  font-weight: bold;
+  border-bottom: 1px dotted black;
+}
+
+.p5 {
+  padding: 0 5px;
+}
+
+.p10 {
+  padding: 0 10px;
+}
+
+.p15 {
+  padding: 0 15px;
+}
+
+.p20 {
+  padding: 0 20px;
+}
+
 .leave-stat {
   margin-top: 10px;
 }

@@ -14,61 +14,104 @@
                     <tr>
                         <td style="width: 50%; padding: 0;" colspan="3"></td>
                         <td style="text-align: right; padding: 0;" colspan="3">
-                            <h4 style="margin: 0;">
+                            <p style="margin: 0;">
                                 ที่
-                                <span style="margin: 0 50px 0 5px;">
+                                <span style="margin: 0 50px 0 0;" class="text-val-dot p20">
                                     โรงพยาบาลเทพรัตน์นครราชสีมา
                                 </span>
-                            </h4>
+                            </p>
                         </td>
                     </tr>
                     <tr>
                         <td style="padding: 0;" colspan="3"></td>
                         <td style="text-align: right; padding: 0;" colspan="3">
-                            <h4 style="margin: 0;">
+                            <p style="margin: 0;">
                                 วันที่
-                                <span style="margin: 0 50px 0 5px;">
+                                <span style="margin: 0 50px 0 0" class="text-val-dot p20">
                                     {{ convDbDateToLongThDate(date('Y-m-d')) }}
                                 </span>
-                            </h4>
+                            </p>
                         </td>
                     </tr>
                     <tr>
                         <td colspan="6">
                             <div>
                                 <p style="margin-left: 60px;">
-                                    ข้าพเจ้า <span style="border-bottom: 1px dotted black;">{{ $swapping->owner->person->prefix->prefix_name.$swapping->owner->person->person_firstname. ' ' .$swapping->owner->person->person_lastname }}</span>
+                                    ข้าพเจ้า <span class="text-val-dot p20">{{ $swapping->owner->person->prefix->prefix_name.$swapping->owner->person->person_firstname. ' ' .$swapping->owner->person->person_lastname }}</span>
                                     <span style="margin-left: 150px;">
-                                        ตำแหน่ง <span>{{ $swapping->owner->person->position->position_name }}{{ $swapping->owner->person->academic ? $swapping->owner->person->academic->ac_name : '' }}</span>
+                                        ตำแหน่ง <span class="text-val-dot p20">{{ $swapping->owner->person->position->position_name }}{{ $swapping->owner->person->academic ? $swapping->owner->person->academic->ac_name : '' }}</span>
                                     </span>
                                 </p>
                             </div>
                             <div>
                                 <p style="margin-left: 60px;">
                                     ขออนุญาตเปลี่ยนเวร 
-                                    <span style="margin: 0 10px;">(&nbsp;&nbsp;&nbsp;) เช้า</span>
-                                    <span style="margin: 0 10px;">(&nbsp;&nbsp;&nbsp;) บ่าย</span>
-                                    <span style="margin: 0 10px;">(&nbsp;&nbsp;&nbsp;) ดึก</span>
-                                    <span style="margin: 0 10px;">(&nbsp;&nbsp;&nbsp;) BD</span>
+                                    <?php
+                                        $owner_n = '';
+                                        $owner_m = '';
+                                        $owner_e = '';
+                                        $owner_b = '';
+                                    ?>
+                                    @if (in_array($swapping->owner_shift, ['ด','ด*','ด**','ด^']))
+                                        <?php $owner_n = '/'; ?>
+                                    @elseif (in_array($swapping->owner_shift, ['ช','ช*','ช**','ช^']))
+                                        <?php $owner_m = '/'; ?>
+                                    @elseif (in_array($swapping->owner_shift, ['บ','บ*','บ**','บ^']))
+                                        <?php $owner_e = '/'; ?>
+                                    @elseif (in_array($swapping->owner_shift, ['B','B*','B**','B^']))
+                                        <?php $owner_b= '/'; ?>
+                                    @endif
+
+                                    <span style="margin: 0 10px;">(&nbsp;{{ $owner_m }}&nbsp;) เช้า</span>
+                                    <span style="margin: 0 10px;">(&nbsp;{{ $owner_e }}&nbsp;) บ่าย</span>
+                                    <span style="margin: 0 10px;">(&nbsp;{{ $owner_n }}&nbsp;) ดึก</span>
+                                    <span style="margin: 0 10px;">(&nbsp;{{ $owner_b }}&nbsp;) BD</span>
                                     <span style="margin: 0 10px;">
-                                        ของวันที่ <span>{{ convDbDateToLongThDate($swapping->owner_date) }}</span>
+                                        ของวันที่ <span class="text-val-dot p20">{{ convDbDateToLongThDate($swapping->owner_date) }}</span>
                                     </span>
                                 </p>
                             </div>
                             <div>
                                 <p style="margin-left: 60px;">
-                                    เหตุผลการขอเปลี่ยนเวร <span>{{ $swapping->reason }}</span>
-                                    <span style="margin-left: 250px;">
-                                        โดยมอบให้ <span>{{ $swapping->delegator->person->prefix->prefix_name.$swapping->delegator->person->person_firstname. ' ' .$swapping->delegator->person->person_lastname }}<</span>
+                                    เหตุผลการขอเปลี่ยนเวร <span class="text-val-dot p20">{{ $swapping->reason }}</span>
+                                    <span style="margin-left: 220px;">
+                                        โดยมอบให้ <span class="text-val-dot p5">{{ $swapping->delegator->person->prefix->prefix_name.$swapping->delegator->person->person_firstname. ' ' .$swapping->delegator->person->person_lastname }}<</span>
                                     </span>
                                 </p>
                             </div>
                             <div>
                                 <p style="margin-left: 60px;">
-                                    ขึ้นปฏิบัติหน้าที่แทนข้าพเจ้า โดยข้าพเจ้าจะขึ้นปฏิบัติงาน
-                                    <span style="margin-left: 10px;">
-                                        ในวันที่ <span>{{ convDbDateToLongThDate($swapping->swap_date) }}</span>
-                                    </span>
+                                    ขึ้นปฏิบัติหน้าที่แทนข้าพเจ้า 
+
+                                    @if ($swapping->no_swap == 0)
+                                        <span>โดยข้าพเจ้าจะขึ้นปฏิบัติงาน
+                                            <?php
+                                                $swap_n = '';
+                                                $swap_m = '';
+                                                $swap_e = '';
+                                                $swap_b = '';
+                                            ?>
+                                            @if (in_array($swapping->swap_shift, ['ด','ด*','ด**','ด^']))
+                                                <?php $swap_n = '/'; ?>
+                                            @elseif (in_array($swapping->swap_shift, ['ช','ช*','ช**','ช^']))
+                                                <?php $swap_m = '/'; ?>
+                                            @elseif (in_array($swapping->swap_shift, ['บ','บ*','บ**','บ^']))
+                                                <?php $swap_e = '/'; ?>
+                                            @elseif (in_array($swapping->swap_shift, ['B','B*','B**','B^']))
+                                                <?php $swap_b= '/'; ?>
+                                            @endif
+
+                                            <span style="margin: 0 5px;">(&nbsp;{{ $swap_m }}&nbsp;) เช้า</span>
+                                            <span style="margin: 0 5px;">(&nbsp;{{ $swap_e }}&nbsp;) บ่าย</span>
+                                            <span style="margin: 0 5px;">(&nbsp;{{ $swap_n }}&nbsp;) ดึก</span>
+                                            <span style="margin: 0 5px;">(&nbsp;{{ $swap_b }}&nbsp;) BD</span>
+                                            <span style="margin-left: 2px;">
+                                                ในวันที่ <span class="text-val-dot p10">{{ convDbDateToLongThDate($swapping->swap_date) }}</span>
+                                            </span>
+                                        </span>
+                                    @else
+                                        <span>โดยข้าพเจ้าจะไม่ขึ้นปฏิบัติแทน</span>
+                                    @endif
                                 </p>
                             </div>
                         </td>
@@ -132,7 +175,7 @@
                         <td colspan="6">
                             <div style="margin-top: 10px;">
                                 <p style="margin-left: 60px;">
-                                    <span>หมายเหตุ : </span>
+                                    <span style="font-weight: bold;">หมายเหตุ : </span>
                                     <span>เป็นหน้าที่ของผู้เปลี่ยนเวรที่จะต้องรับผิดชอบกรณีไม่มีผู้ขึ้นเวรปฏิบัติงาน</span>
                                 </p>
                             </div>

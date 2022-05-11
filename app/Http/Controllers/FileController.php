@@ -71,6 +71,36 @@ class FileController extends Controller
         return renderPdf('forms.form01', $data, $paper); // if you need to save file set 4th arg as 'download'
     }
 
+    public function printForm2($id)
+    {
+        $schedule = Scheduling::where('id', $id)
+                        ->with('depart','division','controller')
+                        ->with('depart.faction')
+                        ->with('shifts','shifts.person')
+                        ->with('shifts.person.prefix','shifts.person.position')
+                        ->first();
+
+        $controller = Person::where('person_id', $schedule->controller_id)
+                        ->with('prefix','position')
+                        ->first();
+
+        $headOfFaction = Person::join('level', 'personal.person_id', '=', 'level.person_id')
+                            ->where('level.faction_id', $schedule->depart->faction_id)
+                            ->where('level.duty_id', '1')
+                            ->with('prefix','position')
+                            ->first();
+
+        $data = [
+            'schedule' => $schedule,
+            'controller' => $controller,
+            'headOfFaction' => $headOfFaction,
+        ];
+
+        $paper = ['size' => 'legal', 'orientation' => 'landscape'];
+        /** Invoke helper function to return view of pdf instead of laravel's view to client */
+        return renderPdf('forms.form02', $data, $paper); // if you need to save file set 4th arg as 'download'
+    }
+
     public function swapForm($id)
     {
         $swapping = ShiftSwapping::with('owner','owner.person','owner.person.prefix')
