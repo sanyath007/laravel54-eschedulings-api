@@ -15,8 +15,6 @@ use Illuminate\Http\Request;
 
 Route::get('/', 'HomeController@index');
 
-Route::post('/files', 'FileController@saveFile');
-
 Route::group(['middleware' => 'api', 'prefix' => 'auth'], function () {
     Route::post('login', 'LoginController@login');
     Route::post('register', 'LoginController@register');
