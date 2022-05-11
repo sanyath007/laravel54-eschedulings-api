@@ -67,7 +67,7 @@
                                 @for($d = 0; $d < date('t', strtotime($schedule->month.'-01')); $d++)
                                     <?php $currDate = date('Y-m-d', strtotime($schedule->month.'-'.($d + 1))); ?>
 
-                                    <td style="width: 2%; text-align: center; padding: 0; {{ setHolidayColumnColor($currDate, $holidays, 'gray') }}">
+                                    <td style="width: 2%; text-align: center; padding: 0; {{ setHolidayColumnColor($currDate, $holidays, '#bac2c6') }}">
                                         {{ $d + 1 }}
                                     </td>
                                 @endfor
@@ -105,7 +105,7 @@
                                     @foreach($arrShifts as $shift)
                                         <?php $curr_date = date('Y-m-d', strtotime($schedule->month.'-'.($i++))); ?>
 
-                                        <td style="text-align: center; font-size: 16px; padding: 0; {{ setHolidayColumnColor($curr_date, $holidays, 'gray') }}">
+                                        <td style="text-align: center; font-size: 16px; padding: 0; {{ setHolidayColumnColor($curr_date, $holidays, '#bac2c6') }}">
                                             {{ str_replace('|', ' ' , $shift) }}
                                         </td>
                                     @endforeach
