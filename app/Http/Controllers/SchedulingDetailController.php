@@ -152,7 +152,7 @@ class SchedulingDetailController extends Controller
             $swap->owner_date           = $req['owner_date'];       // วันที่จะขอเปลี่ยน
             $swap->owner_shift          = $req['owner_shift'];      // เวรที่จะขอเปลี่ยน
             $swap->reason               = $req['reason'];
-            $swap->delegator            = $req['delegator'];        // ผู้ปฏิบัติงานแทน
+            $swap->delegator_id         = $req['delegator'];        // ผู้ปฏิบัติงานแทน
             $swap->delegator_detail_id  = $req['delegator_detail_id'];  // รหัสเวรที่จะปฏิบัติงานแทน
             $swap->no_swap              = $req['no_swap'];          // กรณีขายเวร
             $swap->status               = 'REQUESTED';
