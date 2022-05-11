@@ -56,7 +56,7 @@
                             <tr style="font-size: 14px; padding: 0;">
                                 <td style="width: 2%; text-align: center; padding: 0;" rowspan="2">ลำดับ</td>
                                 <td style="text-align: center;" rowspan="2">ชื่อ-สกุล</td>
-                                <td style="width: 10%; text-align: center;" rowspan="2">ตำแหน่ง</td>
+                                <td style="width: 4%; text-align: center;" rowspan="2">ตำแหน่ง</td>
                                 <td style="text-align: center;" colspan="{{ date('t', strtotime($schedule->month.'-01')) }}">วันที่</td>
                                 <td style="width: 2.5%; text-align: center; padding: 0;" rowspan="2">
                                     รวม
@@ -65,7 +65,9 @@
                             </tr>
                             <tr style="font-size: 14px; padding: 0;">
                                 @for($d = 0; $d < date('t', strtotime($schedule->month.'-01')); $d++)
-                                    <td style="width: 2%; text-align: center; padding: 0;">
+                                    <?php $currDate = date('Y-m-d', strtotime($schedule->month.'-'.($d + 1))); ?>
+
+                                    <td style="width: 2%; text-align: center; padding: 0; {{ setHolidayColumnColor($currDate, $holidays, 'gray') }}">
                                         {{ $d + 1 }}
                                     </td>
                                 @endfor
@@ -75,9 +77,20 @@
                             @foreach($schedule->shifts as $detail)
                                 <?php
                                     $arrShifts = explode(',', $detail->shifts);
-                                    $position = $detail->person->position->position_name;
-                                    if($detail->person->academic) {
-                                        $position .= $detail->person->academic->ac_name;
+
+                                    // Full position name
+                                    // $position = $detail->person->position->position_name;
+                                    // if($detail->person->academic) {
+                                    //     $position .= $detail->person->academic->ac_name;
+                                    // }
+
+                                    // Short position name
+                                    if ($detail->person->position->position_id == 22) {
+                                        $position = 'RN';
+                                    } else if (in_array($detail->person->position->position_id, [126])) {
+                                        $position = 'PN';
+                                    } else if (in_array($detail->person->position->position_id, [89])) {
+                                        $position = 'NA';
                                     }
                                 ?>
                                 <tr>
@@ -85,11 +98,14 @@
                                     <td style="padding: 0 2px;">
                                         {{ $detail->person->prefix->prefix_name.$detail->person->person_firstname. ' ' .$detail->person->person_lastname }}
                                     </td>
-                                    <td style="padding: 0 2px; font-size: 16px;">
+                                    <td style="text-align: center; padding: 0 2px; font-size: 16px;">
                                         {{ $position }}
                                     </td>
+                                    <?php $i = 1; ?>
                                     @foreach($arrShifts as $shift)
-                                        <td style="text-align: center; font-size: 16px; padding: 0;">
+                                        <?php $curr_date = date('Y-m-d', strtotime($schedule->month.'-'.($i++))); ?>
+
+                                        <td style="text-align: center; font-size: 16px; padding: 0; {{ setHolidayColumnColor($curr_date, $holidays, 'gray') }}">
                                             {{ str_replace('|', ' ' , $shift) }}
                                         </td>
                                     @endforeach

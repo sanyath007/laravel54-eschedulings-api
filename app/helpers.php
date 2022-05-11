@@ -130,3 +130,14 @@ function renderPdf($view, $data, $paper = [], $renderType = 'preview')
     /** แบบนี้จะดาวโหลดเลย */
     return $pdf->download('test.pdf');
 }
+
+function setHolidayColumnColor($strDate, $arrHolidays = [], $toColor = '')
+{
+    if (in_array($strDate, $arrHolidays)) {
+        $bgColor = 'background-color: '.$toColor.';';
+    } else {
+        $bgColor = '';
+    }
+
+    return $bgColor;
+}

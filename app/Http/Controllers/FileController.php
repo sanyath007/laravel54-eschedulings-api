@@ -11,6 +11,7 @@ use File;
 use App\Models\Scheduling;
 use App\Models\SchedulingDetail;
 use App\Models\ShiftSwapping;
+use App\Models\Holiday;
 use App\Models\Person;
 
 class FileController extends Controller
@@ -60,10 +61,15 @@ class FileController extends Controller
                             ->with('prefix','position')
                             ->first();
 
+        $sdate = $schedule->month. '-01';
+        $edate = date('Y-m-t', strtotime($sdate));
+        $holidays = Holiday::whereBetween('holiday_date', [$sdate, $edate])->pluck('holiday_date')->toArray();
+
         $data = [
             'schedule' => $schedule,
             'controller' => $controller,
             'headOfFaction' => $headOfFaction,
+            'holidays' => $holidays,
         ];
 
         $paper = ['size' => 'legal', 'orientation' => 'landscape'];
@@ -90,10 +96,15 @@ class FileController extends Controller
                             ->with('prefix','position')
                             ->first();
 
+        $sdate = $schedule->month. '-01';
+        $edate = date('Y-m-t', strtotime($sdate));
+        $holidays = Holiday::whereBetween('holiday_date', [$sdate, $edate])->pluck('holiday_date')->toArray();
+
         $data = [
             'schedule' => $schedule,
             'controller' => $controller,
             'headOfFaction' => $headOfFaction,
+            'holidays' => $holidays,
         ];
 
         $paper = ['size' => 'legal', 'orientation' => 'landscape'];

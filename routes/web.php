@@ -13,5 +13,6 @@
 
 Route::get('/files/{id}', 'FileController@getFile');
 Route::get('/files/{id}/print', 'FileController@printForm');
+Route::get('/files/{id}/print2', 'FileController@printForm2');
 Route::get('/files/{id}/swap', 'FileController@swapForm');
 Route::post('/files', 'FileController@saveFile');
