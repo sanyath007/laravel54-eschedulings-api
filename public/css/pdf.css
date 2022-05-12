@@ -28,7 +28,10 @@
 }
 
 html {
-  margin: 0px;
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  line-height: 18px;
 }
 
 body {
@@ -41,8 +44,8 @@ body {
 .container {
   width: 100%;
   padding: 0;
-  margin: 0 15px;
-  /* border: 1px solid black; */
+  margin: 25px 15px 0;
+  border: 1px solid black;
   /* background-image: url("assets/img/print_bg.png");
   background-repeat: repeat;
   background-position: center; */
