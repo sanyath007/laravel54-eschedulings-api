@@ -12,7 +12,13 @@ class ShiftSwappingController extends Controller
 {
     public function getAll(Request $req)
     {
-        $swappings = ShiftSwapping::with('schedule','schedule.depart','schedule.division')
+        $depart = $req->get('depart');
+
+        $swappings = ShiftSwapping::leftJoin('schedulings', 'schedulings.id', '=', 'shift_swappings.scheduling_id')
+                        ->when(!empty($depart), function($q) use ($depart) {
+                            $q->where('schedulings.depart_id', $depart);
+                        })
+                        ->with('schedule','schedule.depart','schedule.division')
                         ->with('owner','owner.person','delegator','delegator.person')
                         ->paginate(10);
 
