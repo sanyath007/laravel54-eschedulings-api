@@ -118,9 +118,15 @@ class SchedulingDetailController extends Controller
             $shiftsText = implode(',', $req['ot_shifts']);
 
             $detail = SchedulingDetail::find($id);
-            $detail->working        = $req['working'];
-            $detail->ot_shifts      = $shiftsText;
-            $detail->ot             = $req['ot'];
+            $detail->working    = $req['working'];
+            $detail->ot_shifts  = $shiftsText;
+            $detail->ot         = $req['ot'];
+
+            /** Calculate total working shifts amount */
+            $detail->wm          = (float)$detail->m - (float)$req['m'];
+            $detail->we          = (float)$detail->m - (float)$req['e'];
+            $detail->wn          = (float)$detail->m - (float)$req['n'];
+            $detail->wb          = (float)$detail->m - (float)$req['b'];
 
             if($detail->save()) {
                 return [
