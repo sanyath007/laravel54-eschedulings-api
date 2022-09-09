@@ -111,13 +111,13 @@
                                             </td>
                                         @endforeach
                                         <td style="text-align: center; font-size: 16px; padding: 0;">
-                                            {{ $detail->m }}
+                                            {{ $detail->wm }}
                                         </td>
                                         <td style="text-align: center; font-size: 16px; padding: 0;">
-                                            {{ $detail->e }}
+                                            {{ $detail->we }}
                                         </td>
                                         <td style="text-align: center; font-size: 16px; padding: 0;">
-                                            {{ $detail->n }}
+                                            {{ $detail->wn }}
                                         </td>
                                         <td style="text-align: center; font-size: 16px; padding: 0;">
                                             {{ $detail->total }}

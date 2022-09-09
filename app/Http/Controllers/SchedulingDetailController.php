@@ -124,9 +124,9 @@ class SchedulingDetailController extends Controller
 
             /** Calculate total working shifts amount */
             $detail->wm          = (float)$detail->m - (float)$req['m'];
-            $detail->we          = (float)$detail->m - (float)$req['e'];
-            $detail->wn          = (float)$detail->m - (float)$req['n'];
-            $detail->wb          = (float)$detail->m - (float)$req['b'];
+            $detail->we          = (float)$detail->e - (float)$req['e'];
+            $detail->wn          = (float)$detail->n - (float)$req['n'];
+            $detail->wb          = (float)$detail->b - (float)$req['b'];
 
             if($detail->save()) {
                 return [
