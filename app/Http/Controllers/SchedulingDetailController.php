@@ -84,12 +84,40 @@ class SchedulingDetailController extends Controller
         }
     }
 
-    public function oT(Request $req)
+    public function delete($id)
+    {
+        try {
+            $scheduling = Scheduling::find($id);
+
+            if($scheduling->delete()) {
+                /** TODO: To manipulate scheduling_detail data on scheduling is deleted */
+                $deletedDetail = SchedulingDetail::where('scheduling_id', $id)->delete();
+
+                return [
+                    'status'    => 1,
+                    'message'   => 'Deleting successfully',
+                    'id'        => $id
+                ];
+            } else {
+                return [
+                'status'    => 0,
+                'message'   => 'Something went wrong!!'
+            ];
+            }
+        } catch (\Exception $ex) {
+            return [
+                'status'    => 0,
+                'message'   => $ex->getMessage()
+            ];
+        }
+    }
+
+    public function ot(Request $req, $id)
     {
         try {
             $shiftsText = implode(',', $req['ot_shifts']);
 
-            $detail = SchedulingDetail::find($args['id']);
+            $detail = SchedulingDetail::find($id);
             $detail->working        = $req['working'];
             $detail->ot_shifts      = $shiftsText;
             $detail->ot             = $req['ot'];
@@ -105,34 +133,6 @@ class SchedulingDetailController extends Controller
                     'status'    => 0,
                     'message'   => 'Something went wrong!!'
                 ];
-            }
-        } catch (\Exception $ex) {
-            return [
-                'status'    => 0,
-                'message'   => $ex->getMessage()
-            ];
-        }
-    }
-
-    public function delete($req, $res, $args)
-    {
-        try {
-            $scheduling = Scheduling::find($args['id']);
-
-            if($scheduling->delete()) {
-                /** TODO: To manipulate scheduling_detail data on scheduling is deleted */
-                $deletedDetail = SchedulingDetail::where('scheduling_id', $args['id'])->delete();
-
-                return [
-                    'status'    => 1,
-                    'message'   => 'Deleting successfully',
-                    'id'        => $id
-                ];
-            } else {
-                return [
-                'status'    => 0,
-                'message'   => 'Something went wrong!!'
-            ];
             }
         } catch (\Exception $ex) {
             return [
