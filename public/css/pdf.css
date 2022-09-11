@@ -132,3 +132,28 @@ span.text-val-dot {
   display: flex;
   justify-content: center;
 }
+
+.bc-browsers td {
+  text-align: center;
+  padding: 0;
+}
+
+.bc-head-txt-label {
+  position: relative;
+  top: 25;
+  left: 0;
+  margin: 0;
+  padding: 0;
+  line-height: 1;
+  /* font-size: 16px; */
+  -webkit-transform: rotate(270deg);
+  transform: rotate(270deg);
+  white-space: nowrap;
+  -webkit-writing-mode: vertical-rl;
+  writing-mode: vertical-rl;
+  /* border: 1px solid red; */
+}
+
+.remark-text {
+  font-size: 16px;
+}

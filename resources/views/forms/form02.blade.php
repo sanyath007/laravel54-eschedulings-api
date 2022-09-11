@@ -56,12 +56,18 @@
                             <tr style="font-size: 14px; padding: 0;">
                                 <td style="width: 2%; text-align: center; padding: 0;" rowspan="2">ลำดับ</td>
                                 <td style="text-align: center;" rowspan="2">ชื่อ-สกุล</td>
-                                <td style="width: 4%; text-align: center;" rowspan="2">ตำแหน่ง</td>
-                                <td style="text-align: center;" colspan="{{ date('t', strtotime($schedule->month.'-01')) }}">วันที่</td>
-                                <td style="width: 2.5%; text-align: center; padding: 0;" rowspan="2">
-                                    รวม
+                                <td class="bc-browsers" style="width: 3%;" rowspan="2">
+                                    <div class="bc-head-txt-label">ตำแหน่ง</div>
                                 </td>
-                                <td style="width: 5%; text-align: center; padding: 0;" rowspan="2">หมายเหตุ</td>
+                                <td class="bc-browsers" style="width: 3%; padding: 0;" rowspan="2">
+                                    <div class="bc-head-txt-label">ค่าตอบแทน</div>
+                                </td>
+                                <td style="text-align: center;" colspan="{{ date('t', strtotime($schedule->month.'-01')) }}">วันที่</td>
+                                <td style="width: 2.5%; text-align: center; padding: 0;" rowspan="2">จำนวน<br>รวม<br>OT</td>
+                                <td style="width: 4%; text-align: center; padding: 0;" rowspan="2">จำนวน<br>เงิน</td>
+                                <td style="width: 3%; text-align: center; padding: 0;" rowspan="2">ว/ด/ป<br>ที่รับเงิน</td>
+                                <td style="width: 3%; text-align: center; padding: 0;" rowspan="2">ลายมือชื่อ<br>ผู้รับเงิน</td>
+                                <td style="width: 3%; text-align: center; padding: 0;" rowspan="2">หมายเหตุ</td>
                             </tr>
                             <tr style="font-size: 14px; padding: 0;">
                                 @for($d = 0; $d < date('t', strtotime($schedule->month.'-01')); $d++)
@@ -78,19 +84,22 @@
                                 <?php
                                     $arrShifts = explode(',', $detail->shifts);
 
-                                    // Full position name
+                                    /** Full position name */
                                     // $position = $detail->person->position->position_name;
                                     // if($detail->person->academic) {
                                     //     $position .= $detail->person->academic->ac_name;
                                     // }
 
-                                    // Short position name
+                                    /** Short position name and OT rate according to position */
                                     if ($detail->person->position->position_id == 22) {
                                         $position = 'RN';
+                                        $ot_rate = 600;
                                     } else if (in_array($detail->person->position->position_id, [126])) {
                                         $position = 'PN';
+                                        $ot_rate = 360;
                                     } else if (in_array($detail->person->position->position_id, [89])) {
                                         $position = 'NA';
+                                        $ot_rate = 330;
                                     }
                                 ?>
                                 <tr>
@@ -101,6 +110,9 @@
                                     <td style="text-align: center; padding: 0 2px; font-size: 16px;">
                                         {{ $position }}
                                     </td>
+                                    <td style="text-align: center; padding: 0; font-size: 16px;">
+                                        {{ $ot_rate }}
+                                    </td>
                                     <?php $i = 1; ?>
                                     @foreach($arrShifts as $shift)
                                         <?php $curr_date = date('Y-m-d', strtotime($schedule->month.'-'.($i++))); ?>
@@ -110,21 +122,35 @@
                                         </td>
                                     @endforeach
                                     <td style="text-align: center; padding: 0; font-size: 16px;">
-                                        {{ $detail->total }}
+                                        {{ $detail->ot }}
                                     </td>
+                                    <td style="text-align: right; padding: 0 2px 0 0; font-size: 16px;">
+                                        {{ number_format((float)$detail->ot * (float)$ot_rate) }}
+                                    </td>
+                                    <td style="text-align: center; padding: 0;"></td>
+                                    <td style="text-align: center; padding: 0;"></td>
                                     <td style="text-align: center; padding: 0;">
                                         {{ $detail->remark }}
                                     </td>
                                 </tr>
                             @endforeach
+
+                            <tr>
+                                <td style="text-align: center; padding: 0;" colspan="35">รวม</td>
+                                <td style="text-align: center; padding: 0; font-size: 16px;">999</td>
+                                <td style="text-align: right; padding: 0 2px 0 0; font-size: 16px;">9,999.99</td>
+                                <td colspan="3"></td>
+                            </tr>
                         </table>
                     </td>
                 </tr>
+
+                <!-- // Summary Sction -->
                 <tr>
                     <td colspan="6">
                         <div style="margin-top: 5px;">
                             <p style="margin: 0 50px;">
-                                หมายเหตุ : {{ $schedule->remark }}
+                                หมายเหตุ : <span class="remark-text">{{ $schedule->remark }}</span>
                             </p>
                             <p style="margin: 0 50px;">
                                 รวมเป็นเงิน <span class="dot">
@@ -134,6 +160,9 @@
                         </div>
                     </td>
                 </tr>
+                <!-- // Summary Sction -->
+
+                <!-- // Signatures of head of depart and faction -->
                 <tr>
                     <td colspan="3">
                         <div style="margin-top: 20px;">
@@ -162,6 +191,7 @@
                         </div>
                     </td>
                 </tr>
+                <!-- // Signatures of head of depart and faction -->
             </table>
         </div>
         <!-- /.container -->
