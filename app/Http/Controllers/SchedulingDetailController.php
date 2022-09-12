@@ -115,7 +115,7 @@ class SchedulingDetailController extends Controller
     public function ot(Request $req, $id)
     {
         try {
-            $shiftsText = implode(',', $req['ot_shifts']);
+            $shiftsText = empty($req['ot_shifts']) ? '' : implode(',', $req['ot_shifts']);
 
             $detail = SchedulingDetail::find($id);
             $detail->working    = $req['working'];
