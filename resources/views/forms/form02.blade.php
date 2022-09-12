@@ -30,17 +30,13 @@
                     </td>
                 </tr>
                 <tr>
-                    <td style="text-align: right; padding: 0;" colspan="3">
+                    <td style="text-align: center; padding: 0;" colspan="6">
                         <h4 style="margin: 0;">
                             หน่วยงาน 
                             @if($schedule->division)
                                 <span style="margin: 0px;">{{ $schedule->division->ward_name }}</span>
                             @endif
                             <span style="margin: 0 0 0 5px;">{{ $schedule->depart->depart_name }}</span>
-                        </h4>
-                    </td>
-                    <td style="padding: 0;" colspan="3">
-                        <h4 style="margin: 0;">
                             <span style="margin: 0 0 0 10px;">
                                 {{ $schedule->depart->faction->faction_name }}
                             </span>
