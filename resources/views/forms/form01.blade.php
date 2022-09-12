@@ -133,11 +133,13 @@
                             </table>
                         </td>
                     </tr>
+
+                    <!-- // Summary Sction -->
                     <tr>
                         <td colspan="6">
                             <div style="margin-top: 5px;">
                                 <p style="margin: 0 50px;">
-                                    หมายเหตุ : {{ $schedule->remark }}
+                                    หมายเหตุ : <span class="remark-text">{{ $schedule->remark }}</span>
                                 </p>
                                 <p style="margin: 0 50px;">
                                     รวมเป็นเงิน <span class="dot">
@@ -147,6 +149,9 @@
                             </div>
                         </td>
                     </tr>
+                    <!-- // Summary Sction -->
+
+                    <!-- // Signatures of head of depart and faction -->
                     <tr>
                         <td colspan="3">
                             <div style="margin-top: 20px;">
@@ -175,6 +180,8 @@
                             </div>
                         </td>
                     </tr>
+                    <!-- // Signatures of head of depart and faction -->
+
                 </table>
             </div>
         </div>

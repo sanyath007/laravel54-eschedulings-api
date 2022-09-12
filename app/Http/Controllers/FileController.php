@@ -93,6 +93,20 @@ class FileController extends Controller
         $headOfFaction = Person::join('level', 'personal.person_id', '=', 'level.person_id')
                             ->where('level.faction_id', $schedule->depart->faction_id)
                             ->where('level.duty_id', '1')
+                            ->where('person_state', '1')
+                            ->with('prefix','position')
+                            ->first();
+
+        $headOfFinance = Person::join('level', 'personal.person_id', '=', 'level.person_id')
+                            ->where('level.depart_id', '3')
+                            ->where('level.duty_id', '2')
+                            ->where('person_state', '1')
+                            ->with('prefix','position')
+                            ->first();
+
+        $director = Person::join('level', 'personal.person_id', '=', 'level.person_id')
+                            ->where('level.duty_id', '6')
+                            ->where('person_state', '1')
                             ->with('prefix','position')
                             ->first();
 
@@ -101,10 +115,12 @@ class FileController extends Controller
         $holidays = Holiday::whereBetween('holiday_date', [$sdate, $edate])->pluck('holiday_date')->toArray();
 
         $data = [
-            'schedule' => $schedule,
-            'controller' => $controller,
+            'schedule'      => $schedule,
+            'controller'    => $controller,
             'headOfFaction' => $headOfFaction,
-            'holidays' => $holidays,
+            'headOfFinance' => $headOfFinance,
+            'director'      => $director,
+            'holidays'      => $holidays,
         ];
 
         $paper = ['size' => 'legal', 'orientation' => 'landscape'];

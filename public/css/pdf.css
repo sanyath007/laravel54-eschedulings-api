@@ -31,13 +31,14 @@ html {
   margin: 0;
   padding: 0;
   box-sizing: border-box;
-  line-height: 18px;
+  line-height: 16px;
 }
 
 body {
   font-family: "THSarabunNew";
   font-size: 14pt;
-  margin: 0 0;
+  margin: 0;
+  padding: 0;
   /* border: 1px dashed red; */
 }
 
@@ -72,14 +73,15 @@ h1, h2, h3, h4 {
   border: 1px dashed black;
 } */
 
-th, td {
+/* th, td {
   padding: 0;
   margin: 0;
   vertical-align: text-top;
   padding-left: 2px;
-}
+} */
 
-td p {
+td p,
+td span {
   padding: 0;
   margin: 0;
 }

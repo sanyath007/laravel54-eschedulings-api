@@ -1,13 +1,13 @@
 <html>
     <head>
         <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
-        <title>ตารางปฏิบัติงานในและนอกเวลาราชการ</title>
+        <title>หลักฐานการเบิกจ่ายเงินตอบแทนการปฏิบัติงานนอกเวลาราชการ</title>
         <link rel="stylesheet" href="{{ asset('/css/pdf.css') }}">
     </head>
     <body>
         <div class="container">
             <div class="header">
-                <h3 style="margin: 0px;">ตารางปฏิบัติงานในและนอกเวลาราชการ</h3>
+                <h4 style="margin: 0px;">หลักฐานการเบิกจ่ายเงินตอบแทนการปฏิบัติงานนอกเวลาราชการ</h4>
             </div>
 
             <table style="width: 100%;">
@@ -64,9 +64,9 @@
                                 </td>
                                 <td style="text-align: center;" colspan="{{ date('t', strtotime($schedule->month.'-01')) }}">วันที่</td>
                                 <td style="width: 2.5%; text-align: center; padding: 0;" rowspan="2">จำนวน<br>รวม<br>OT</td>
-                                <td style="width: 4%; text-align: center; padding: 0;" rowspan="2">จำนวน<br>เงิน</td>
+                                <td style="width: 4.5%; text-align: center; padding: 0;" rowspan="2">จำนวน<br>เงิน</td>
                                 <td style="width: 3%; text-align: center; padding: 0;" rowspan="2">ว/ด/ป<br>ที่รับเงิน</td>
-                                <td style="width: 3%; text-align: center; padding: 0;" rowspan="2">ลายมือชื่อ<br>ผู้รับเงิน</td>
+                                <td style="width: 4%; text-align: center; padding: 0;" rowspan="2">ลายมือชื่อ<br>ผู้รับเงิน</td>
                                 <td style="width: 3%; text-align: center; padding: 0;" rowspan="2">หมายเหตุ</td>
                             </tr>
                             <tr style="font-size: 14px; padding: 0;">
@@ -79,7 +79,7 @@
                                 @endfor
                             </tr>
 
-                            <?php $row = 0; ?>
+                            <?php $row = 0; $sum_ot = 0.0; $total_ot_amt = 0.0; $total_ot = 0.0; ?>
                             @foreach($schedule->shifts as $detail)
                                 <?php
                                     $arrShifts = explode(',', $detail->shifts);
@@ -101,6 +101,11 @@
                                         $position = 'NA';
                                         $ot_rate = 330;
                                     }
+
+                                    $sum_ot = (float)$detail->ot * (float)$ot_rate;
+                                    /** Calculate total */
+                                    $total_ot_amt += (float)$detail->ot;
+                                    $total_ot += $sum_ot;
                                 ?>
                                 <tr>
                                     <td style="text-align: center; padding: 0;">{{ ++$row }}</td>
@@ -125,7 +130,7 @@
                                         {{ $detail->ot }}
                                     </td>
                                     <td style="text-align: right; padding: 0 2px 0 0; font-size: 16px;">
-                                        {{ number_format((float)$detail->ot * (float)$ot_rate) }}
+                                        {{ number_format($sum_ot, 2) }}
                                     </td>
                                     <td style="text-align: center; padding: 0;"></td>
                                     <td style="text-align: center; padding: 0;"></td>
@@ -137,8 +142,12 @@
 
                             <tr>
                                 <td style="text-align: center; padding: 0;" colspan="35">รวม</td>
-                                <td style="text-align: center; padding: 0; font-size: 16px;">999</td>
-                                <td style="text-align: right; padding: 0 2px 0 0; font-size: 16px;">9,999.99</td>
+                                <td style="text-align: center; padding: 0; font-size: 16px;">
+                                    {{ $total_ot_amt }}
+                                </td>
+                                <td style="text-align: right; padding: 0 1px 0 0; font-size: 16px;">
+                                    {{ number_format($total_ot, 2) }}
+                                </td>
                                 <td colspan="3"></td>
                             </tr>
                         </table>
@@ -150,12 +159,11 @@
                     <td colspan="6">
                         <div style="margin-top: 5px;">
                             <p style="margin: 0 50px;">
-                                หมายเหตุ : <span class="remark-text">{{ $schedule->remark }}</span>
+                                รวมเป็นเงิน (ตัวอักษร) 
+                                <span class="dot" style="margin-left: 2rem;">( {{ baht_text($total_ot) }} )</span>
                             </p>
                             <p style="margin: 0 50px;">
-                                รวมเป็นเงิน <span class="dot">
-
-                                </span>
+                                ขอรับรองว่าผู้มีรายชื่อข้างต้นปฏิบัติงานนอกเวลาจริง
                             </p>
                         </div>
                     </td>
@@ -167,7 +175,7 @@
                     <td colspan="3">
                         <div style="margin-top: 20px;">
                             <p style="margin-left: 150px;">
-                                (ลงชื่อ)<span class="dot">......................................................</span>หัวหน้ากลุ่มงาน
+                                (ลงชื่อ)<span class="dot">......................................................</span>ผู้รับรองการปฏิบัติงาน/หัวหน้างาน
                             </p>
                             <p style="margin-left: 200px;">
                                 (<span class="dot">{{ $controller->prefix->prefix_name.$controller->person_firstname. ' ' .$controller->person_lastname }}</span>)
@@ -180,13 +188,41 @@
                     <td colspan="3">
                         <div style="margin-top: 20px;">
                             <p style="margin-left: 50px;">
-                                (ลงชื่อ)<span class="dot">......................................................</span>
+                                (ลงชื่อ)<span class="dot">......................................................</span>ผู้จ่ายเงิน
                             </p>
                             <p style="margin-left: 100px;">
-                                (<span class="dot">{{ $headOfFaction->prefix->prefix_name.$headOfFaction->person_firstname. ' ' .$headOfFaction->person_lastname }}</span>)
+                                (<span class="dot">{{ $headOfFinance->prefix->prefix_name.$headOfFinance->person_firstname. ' ' .$headOfFinance->person_lastname }}</span>)
                             </p>
                             <p style="margin-left: 50px;">
+                                ตำแหน่ง <span class="dot">{{ $headOfFinance->position->position_name }}{{ $headOfFinance->academic ? $headOfFinance->academic->ac_name : '' }}</span>
+                            </p>
+                        </div>
+                    </td>
+                </tr>
+                <tr>
+                    <td colspan="3">
+                        <div style="margin-top: 20px;">
+                            <p style="margin-left: 150px;">
+                                (ลงชื่อ)<span class="dot">......................................................</span>ผู้รับรองการปฏิบัติงาน/หัวหน้ากลุ่มภารกิจ
+                            </p>
+                            <p style="margin-left: 200px;">
+                                (<span class="dot">{{ $headOfFaction->prefix->prefix_name.$headOfFaction->person_firstname. ' ' .$headOfFaction->person_lastname }}</span>)
+                            </p>
+                            <p style="margin-left: 150px;">
                                 ตำแหน่ง <span class="dot">{{ $headOfFaction->position->position_name }}{{ $headOfFaction->academic ? $headOfFaction->academic->ac_name : '' }}</span>
+                            </p>
+                        </div>
+                    </td>
+                    <td colspan="3">
+                        <div style="margin-top: 20px;">
+                            <p style="margin-left: 50px;">
+                                (ลงชื่อ)<span class="dot">......................................................</span>ผู้อนุมัติ
+                            </p>
+                            <p style="margin-left: 100px;">
+                                (<span class="dot">{{ $director->prefix->prefix_name.$director->person_firstname. ' ' .$director->person_lastname }}</span>)
+                            </p>
+                            <p style="margin-left: 50px;">
+                                ผู้อำนวยการโรงพยาบาลเทพรัตน์นครราชสีมา
                             </p>
                         </div>
                     </td>
