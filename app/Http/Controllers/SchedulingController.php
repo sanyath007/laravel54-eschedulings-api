@@ -77,6 +77,14 @@ class SchedulingController extends Controller
             $scheduling->division_id    = $req['division'];
             $scheduling->month          = $req['month'];            
             $scheduling->year           = $req['year'];
+            $scheduling->schedule_type_id = $req['schedule_type_id'];
+
+            if ($req['schedule_type_id'] == '1') {
+                $scheduling->title      = 'RN';
+            } else if ($req['schedule_type_id'] == '2') {
+                $scheduling->title      = 'PN/NA';
+            }
+
             $scheduling->controller_id  = $req['controller'];
             $scheduling->total_m        = $req['total_m'];
             $scheduling->total_e        = $req['total_e'];
@@ -133,6 +141,14 @@ class SchedulingController extends Controller
             $scheduling->division_id    = $req['division'];
             $scheduling->month          = $req['month'];
             $scheduling->year           = $req['year'];
+            $scheduling->schedule_type_id = $req['schedule_type_id'];
+
+            if ($req['schedule_type_id'] == '1') {
+                $scheduling->title      = 'RN';
+            } else if ($req['schedule_type_id'] == '2') {
+                $scheduling->title      = 'PN/NA';
+            }
+
             $scheduling->controller_id  = $req['controller'];
             $scheduling->total_m        = $req['total_m'];
             $scheduling->total_e        = $req['total_e'];
