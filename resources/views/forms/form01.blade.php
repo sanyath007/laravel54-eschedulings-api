@@ -91,6 +91,15 @@
                                     $total_pn_ot = 0.00;
                                     $total_pn_en = 0.00;
 
+                                    /** NA */
+                                    $total_na_m = 0.00;
+                                    $total_na_e = 0.00;
+                                    $total_na_n = 0.00;
+                                    $total_na_b = 0.00;
+                                    $total_na_working = 0.00;
+                                    $total_na_ot = 0.00;
+                                    $total_na_en = 0.00;
+
                                     /** All OT rate */
                                     $ot_rn_rate = 600;
                                     $ot_pn_rate = 360;
@@ -130,13 +139,20 @@
                                             $total_pn_working += (float)$detail->working;
                                             $total_pn_ot += (float)$detail->ot;
                                         } else {
-                                            $total_m += (float)$detail->wm;
-                                            $total_e += (float)$detail->we;
-                                            $total_n += (float)$detail->wn;
-                                            $total_b += (float)$detail->wb;
-                                            $total_working += (float)$detail->working;
-                                            $total_ot += (float)$detail->ot;
+                                            $total_na_m += (float)$detail->wm;
+                                            $total_na_e += (float)$detail->we;
+                                            $total_na_n += (float)$detail->wn;
+                                            $total_na_b += (float)$detail->wb;
+                                            $total_na_working += (float)$detail->working;
+                                            $total_na_ot += (float)$detail->ot;
                                         }
+
+                                        $total_m += (float)$detail->wm;
+                                        $total_e += (float)$detail->we;
+                                        $total_n += (float)$detail->wn;
+                                        $total_b += (float)$detail->wb;
+                                        $total_working += (float)$detail->working;
+                                        $total_ot += (float)$detail->ot;
                                     ?>
                                     <tr>
                                         <td style="text-align: center; padding: 0;">{{ ++$row }}</td>
@@ -208,9 +224,9 @@
                             /** ค่าเวรบ่าย-ดึก ของพยาบาล */
                             $net_en = $total_en * $en_rn_rate;
                         } else if ($schedule->schedule_type_id == '2') {
-                            /** OT ของผู้ช่วยพยาบาล และ ผู้ช่วยเหลือคนไข้ */
-                            $net_ot = ($total_ot * $ot_na_rate) + ($total_pn_ot * $ot_pn_rate);
-                            /** ค่าเวรบ่าย-ดึก เฉพาะผู้ช่วยพยาบาล */
+                            /** OT ของผู้ช่วยพยาบาล (PN) และ ผู้ช่วยเหลือคนไข้ (NA) */
+                            $net_ot = ($total_pn_ot * $ot_pn_rate) + ($total_na_ot * $ot_na_rate);
+                            /** ค่าเวรบ่าย-ดึก เฉพาะผู้ช่วยพยาบาล (PN) */
                             $total_pn_en = $total_pn_e + $total_pn_n;
                             $net_en = $total_pn_en * $en_pn_rate;
                         }
@@ -235,10 +251,10 @@
                                             จำนวนเงิน OT PN {{ $total_pn_ot }}x{{ $ot_pn_rate }} = {{ number_format($total_pn_ot * $ot_pn_rate, 2) }} บาท
                                         </span>
                                         <span class="remark-text" style="margin-left: 2rem;">
-                                            จำนวนเงิน OT NA  {{ $total_ot }}x{{ $ot_na_rate }} = {{ number_format($total_ot * $ot_na_rate, 2) }} บาท
+                                            จำนวนเงิน OT NA  {{ $total_na_ot }}x{{ $ot_na_rate }} = {{ number_format($total_na_ot * $ot_na_rate, 2) }} บาท
                                         </span>
                                         <span class="remark-text" style="margin-left: 2rem;">
-                                            ค่าตอบแทนบ่าย/ดึก PN  {{ $total_en }}x{{ $en_pn_rate }} = {{ number_format($net_en, 2) }} บาท
+                                            ค่าตอบแทนบ่าย/ดึก PN  {{ $total_pn_en }}x{{ $en_pn_rate }} = {{ number_format($net_en, 2) }} บาท
                                         </span>
                                     @endif
                                     <span class="remark-text" style="margin-left: 2rem;">{{ $schedule->remark }}</span>
