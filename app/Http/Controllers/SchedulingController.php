@@ -159,8 +159,8 @@ class SchedulingController extends Controller
             $scheduling->remark         = $req['remark'];
 
             if($scheduling->save()) {
-                /** Delete scheduling_detail data on that were specified in removedList array */
-                // $oldDetail = SchedulingDetail::whereIn('id', $req['removedList'])->delete();
+                /** Delete scheduling_details data that have been specified in removedList array */
+                $oldDetail = SchedulingDetail::whereIn('id', $req['removedList'])->delete();
 
                 foreach($req['person_shifts'] as $ps) {
                     /** Check if person_shifts have not an id field (new row) */
