@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Input;
 use App\Models\ShiftSwapping;
+use App\Models\Scheduling;
 use App\Models\SchedulingDetail;
 
 class ShiftSwappingController extends Controller
@@ -14,12 +15,15 @@ class ShiftSwappingController extends Controller
     {
         $depart = $req->get('depart');
 
-        $swappings = ShiftSwapping::leftJoin('schedulings', 'schedulings.id', '=', 'shift_swappings.scheduling_id')
-                        ->when(!empty($depart), function($q) use ($depart) {
-                            $q->where('schedulings.depart_id', $depart);
-                        })
-                        ->with('schedule','schedule.depart','schedule.division')
+        $schedulesList  = Scheduling::when(!empty($depart), function($q) use ($depart) {
+                                $q->where('depart_id', $depart);
+                            })->pluck('id');
+
+        $swappings  = ShiftSwapping::with('schedule','schedule.depart','schedule.division')
                         ->with('owner','owner.person','delegator','delegator.person')
+                        ->when(!empty($depart), function($q) use ($schedulesList) {
+                            $q->where('scheduling_id', $schedulesList);
+                        })
                         ->paginate(10);
 
         return [
